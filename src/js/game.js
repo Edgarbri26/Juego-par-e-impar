@@ -55,8 +55,8 @@ function updateCells() {
 
 function resetGame() {
     playerTurn = true;
-    arrayImpar = [1, 3, 5, 7, 9];
-    arrayPar = [2, 4, 6, 8];
+    arrayImpar = ["",1, 3, 5, 7, 9];
+    arrayPar = ["",2, 4, 6, 8];
     contents.forEach((content) => {
         content.innerHTML = ""; // Limpiar el select
         content.classList.remove("show"); // Ocultar el select
