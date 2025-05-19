@@ -1,6 +1,6 @@
-{const contents = document.querySelectorAll('.content');
+const contents = document.querySelectorAll('.content');
+let player = document.querySelectorAll('.player');
 let playerTurn = true;
-
 let arrayImpar = ["",1, 3, 5, 7, 9];
 let arrayPar = ["",2, 4, 6, 8];
 
@@ -14,17 +14,21 @@ contents.forEach((content, index) => {
         event.target.value = ""; // Limpiar el select
         if (playerTurn) {
             arrayImpar = arrayImpar.filter(num => num !== selectedValue);
-            console.log(arrayImpar);
+            let cell = event.target.parentElement;
+            cell.classList.add("impar");
         } else {
             arrayPar = arrayPar.filter(num => num !== selectedValue);
-            console.log(arrayPar);
+            let cell = event.target.parentElement;
+            cell.classList.add("par");
         }
+
+        playerTurn? player.textContent = "Jugador Impar" : player.textContent = "Jugador Par"; 
 
         playerTurn = !playerTurn; // Cambiar turno
         updateCells();
 
+        //para ocultar el select
         event.target.classList.add("hiden");
-        
     });
 });
 
@@ -44,4 +48,3 @@ function updateCells() {
     
 }
 
-}
