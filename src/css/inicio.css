@@ -16,9 +16,9 @@ img {
 h1 {
     position: relative;
     right: 20px;
-    font-family: fantasy;
     color: white;
     text-align: center;
+    font-size: 50px;
 }
 
 #game-description {
@@ -37,6 +37,7 @@ p {
     text-align: center;
     position: relative;
     top: 20px;
+    font-size: 20px;
 }
 
 button {
