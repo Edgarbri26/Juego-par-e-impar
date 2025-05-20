@@ -10,6 +10,12 @@ body{
     color: white;
 }
 
+#resultado{
+    position: relative;
+    top: 350px;
+    left: 15px;
+}
+
 .hiden{
     display: none !important;
 }
@@ -61,7 +67,7 @@ body{
 
 
 #board .par{
-    background-color:aqua;
+    background-color: #007bff;
 }
 
 #board .impar{

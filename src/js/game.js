@@ -5,7 +5,7 @@ let playerTurn = true;
 let arrayImpar = [];
 let arrayPar = [];
 
-resetGame(); // Inicializar el juego
+    resetGame(); // Inicializar el juego
 
 contents.forEach((content, index) => {
     updateCells(content); 
@@ -25,7 +25,7 @@ contents.forEach((content, index) => {
             cell.classList.add("par");
         }
 
-        
+        validarGanador();
 
         playerTurn = !playerTurn; // Cambiar turno
         updateCells();
@@ -67,6 +67,9 @@ function resetGame() {
         content.classList.add("hiden"); // Aplicar la clase que lo hace invisible
     });
 
+    const mensaje = document.getElementById("resultado");
+    mensaje.innerHTML = ""; // Limpiar el mensaje de resultado
+
     labels.forEach((label) => {
         label.textContent = ""; // Limpiar el número en la celda
         label.addEventListener("click", showSelect); // Reagregar el evento click
@@ -100,11 +103,36 @@ function showSelect(event) {
     
 }
 
-// validar ganada 
+
 function validarGanador() {
+    // Obtén los valores numéricos de cada celda
+    const celdas = [];
+    for (let i = 1; i <= 9; i++) {
+        const label = document.querySelector(`#cell${i} ~ .num`);
+        celdas[i] = label && label.textContent ? parseInt(label.textContent) : null;
+    }
 
+    // Combinaciones ganadoras (índices de las celdas)
+    const combinaciones = [
+        [1,2,3], [4,5,6], [7,8,9], // filas
+        [1,4,7], [2,5,8], [3,6,9], // columnas
+        [1,5,9], [3,5,7]           // diagonales
+    ];
 
+    combinaciones.forEach((combo) => {
+        const [a, b, c] = combo;
+        if (celdas[a] !== null && celdas[b] !== null && celdas[c] !== null &&(celdas[a] + celdas[b] + celdas[c] === 15))
+        {
+            const winner = playerTurn ? "Jugador Impar" : "Jugador Par";
+            const mensaje = document.getElementById("resultado");
+            mensaje.innerHTML = `<h2>${winner} ha ganado!</h2>`;
+            return;
+        }
+        // else if(celdas[a] !== null && celdas[b] !== null && celdas[c] !== null &&(celdas[a] + celdas[b] + celdas[c] !== 15))
+        // {
+        //     const mensaje = document.getElementById("resultado");
+        //     mensaje.innerHTML = `<h2>Empate!</h2>`;
+        //     return;
+        // }
+    });
 }
-
-// validar quien gano si fue par impar 
-
