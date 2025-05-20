@@ -17,7 +17,7 @@ contents.forEach((content, index) => {
         event.target.value = ""; // Limpiar el select
         if (playerTurn) {
             arrayImpar = arrayImpar.filter(num => num !== selectedValue);
-            let cell = event.target.parentElement;
+            let cell = event.target.parentElement; // para seleccionar el elemento padre
             cell.classList.add("impar");
         } else {
             arrayPar = arrayPar.filter(num => num !== selectedValue);
@@ -100,4 +100,11 @@ function showSelect(event) {
     
 }
 
+// validar ganada 
+function validarGanador() {
+
+
+}
+
+// validar quien gano si fue par impar 
 
