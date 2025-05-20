@@ -119,20 +119,23 @@ function validarGanador() {
         [1,5,9], [3,5,7]           // diagonales
     ];
 
+    let hayGanador = false;
     combinaciones.forEach((combo) => {
         const [a, b, c] = combo;
-        if (celdas[a] !== null && celdas[b] !== null && celdas[c] !== null &&(celdas[a] + celdas[b] + celdas[c] === 15))
-        {
+        if (
+            celdas[a] !== null && celdas[b] !== null && celdas[c] !== null &&
+            (celdas[a] + celdas[b] + celdas[c] === 15)
+        ) {
             const winner = playerTurn ? "Jugador Impar" : "Jugador Par";
             const mensaje = document.getElementById("resultado");
-            mensaje.innerHTML = `<h2>${winner} ha ganado!</h2>`;
-            return;
+            mensaje.innerHTML = `<h2>El jugador ${winner} ha ganado la partida!</h2>`;
+            hayGanador = true;
         }
-        // else if(celdas[a] !== null && celdas[b] !== null && celdas[c] !== null &&(celdas[a] + celdas[b] + celdas[c] !== 15))
-        // {
-        //     const mensaje = document.getElementById("resultado");
-        //     mensaje.innerHTML = `<h2>Empate!</h2>`;
-        //     return;
-        // }
     });
+
+    // Si no hay ganador y todas las celdas tienen valor, es empate
+    if (!hayGanador && celdas.slice(1).every(val => val !== null)) {
+        const mensaje = document.getElementById("resultado");
+        mensaje.innerHTML = `<h2>¡La partida ha terminado en empate!</h2>`;
+    }
 }
