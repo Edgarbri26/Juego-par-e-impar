@@ -16,9 +16,6 @@ body{
     left: 15px;
 }
 
-.hiden{
-    display: none !important;
-}
 .show{
     display: block !important;
 }
@@ -44,12 +41,12 @@ body{
     bottom: 0;
     position: absolute;
     margin: auto;
+    border-radius: 10px;
+    
     
 }
 
 .cell{
-    width: 100px;
-    height: 100px;
     background-color: grey;
     display: flex;
     justify-content: center;
@@ -66,12 +63,15 @@ body{
 
 
 
-#board .par{
+.par{
     background-color: #007bff;
+    box-shadow: 2px 2px 6px #007bff;
 }
 
-#board .impar{
+.impar{
     background-color: rgba(255, 0, 0, 0.548) ;
+    box-shadow: 2px 2px 6px rgba(255, 0, 0, 0.548);
+
 }
 
 #board .num{
@@ -91,6 +91,7 @@ body{
     z-index: 2;
     border-radius: 10px;
     overflow: hidden;
+    display: none;
 }
 
 /*boton*/
