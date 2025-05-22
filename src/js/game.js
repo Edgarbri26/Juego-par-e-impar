@@ -8,6 +8,20 @@ let arrayPar = [];
 
     resetGame(); // Inicializar el juego
 
+    window.addEventListener('DOMContentLoaded', () => {
+        jugadorEfectoHover();
+        let reloadCount = parseInt(localStorage.getItem('reloadCount') || '0', 10);
+
+        reloadCount += 1;
+        localStorage.setItem('reloadCount', reloadCount);
+
+        if (reloadCount === 2) {
+            // Redirige solo en la segunda recarga
+            localStorage.removeItem('reloadCount'); // Limpia el contador para futuras recargas
+            window.location.href = "inicio.html"; // Cambia por la ruta que necesites
+        }
+    });
+
 contents.forEach((content, index) => {
     updateCells(content); 
 
@@ -20,21 +34,25 @@ contents.forEach((content, index) => {
             arrayImpar = arrayImpar.filter(num => num !== selectedValue);
             let cell = event.target.parentElement; // para seleccionar el elemento padre
             cell.classList.add("impar");
-            board.classList.add("impar");
         } else {
             arrayPar = arrayPar.filter(num => num !== selectedValue);
             let cell = event.target.parentElement;
             cell.classList.add("par");
-            board.classList.add("par");
         }
         
         validarGanador();
         
         playerTurn = !playerTurn; // Cambiar turno
+        jugadorEfectoHover()
         updateCells();
         
         event.target.classList.remove("show"); // ocultAR el select
+        
         playerTurn? player.textContent = "Jugador Impar" : player.textContent = "Jugador Par";
+        const mensaje = document.getElementById('resultado');
+        if (!mensaje.innerHTML == "") {
+            player.innerText = `El Juego a Terminado`
+        }
         label = labels[index];
         label.removeEventListener("click", showSelect); // Elimina el evento click para evitar múltiples activaciones
     });
@@ -130,17 +148,16 @@ function validarGanador() {
             celdas[a] !== null && celdas[b] !== null && celdas[c] !== null &&
             (celdas[a] + celdas[b] + celdas[c] === 15)
         ) {
-            const winner = playerTurn ? "Jugador Impar" : "Jugador Par";
+            const winner = playerTurn ? "Impar" : "Par";
             const mensaje = document.getElementById("resultado");
             mensaje.innerHTML = `<h2>El jugador ${winner} ha ganado la partida!</h2>`;
             hayGanador = true;
-            labels.forEach((label) => {
-            label.removeEventListener("click", showSelect); // Reagregar el evento click
             const Cambiartexto = document.getElementById('btn-reset');
             Cambiartexto.innerText =`Volver a jugar`;
 
-    });
-
+            labels.forEach((label) => {
+              label.removeEventListener("click", showSelect);
+            });
         }
     });
 
@@ -150,5 +167,30 @@ function validarGanador() {
         mensaje.innerHTML = `<h2>¡La partida ha terminado en empate!</h2>`;
         const Cambiartexto = document.getElementById('btn-reset');
         Cambiartexto.innerText =`Volver a jugar`;
+    }
+}
+
+
+function jugadorEfectoHover() {
+    const celdas = document.querySelectorAll('.cell');
+    // Elimina cualquier clase de hover previa
+    celdas.forEach(cell => {
+        cell.classList.remove('hover-impar', 'hover-par');
+    });
+
+    if (playerTurn) {
+        // Jugador Impar
+        celdas.forEach(cell => {
+            if (!cell.classList.contains('impar') && !cell.classList.contains('par')) {
+                cell.classList.add('hover-impar');
+            }
+        });
+    } else {
+        // Jugador Par
+        celdas.forEach(cell => {
+            if (!cell.classList.contains('impar') && !cell.classList.contains('par')) {
+                cell.classList.add('hover-par');
+            }
+        });
     }
 }

@@ -10,10 +10,15 @@ body{
     color: white;
 }
 
+#player{
+    position: relative;
+    font-size: 40px;
+    bottom: 10px;
+}
 #resultado{
     position: relative;
-    top: 350px;
-    left: 15px;
+    top: 330px;
+    font-size: 20px;
 }
 
 .show{
@@ -37,41 +42,44 @@ body{
     height: 300px;
     right: 0;
     left: 0;
-    top: 0;
+    top: 60px;
     bottom: 0;
     position: absolute;
     margin: auto;
-    border-radius: 10px;
-    
-    
+    background: white; /* El color de las líneas divisorias */
+    padding: 0;
+    border-radius: 13px;
 }
 
 .cell{
-    background-color: grey;
+    background-color: #212121;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2em;
+    font-size: 5em;
     cursor: pointer;
-    border-radius: 10px;
     position: relative;
 }
 
-#board .cell:hover{
-    background-color: #e0e0e0;
-}
+#board .cell:nth-child(1) { border-top-left-radius: 10px; }
+#board .cell:nth-child(3) { border-top-right-radius: 10px; }
+#board .cell:nth-child(7) { border-bottom-left-radius: 10px; }
+#board .cell:nth-child(9) { border-bottom-right-radius: 10px; }
 
+#board .cell.hover-impar:hover {
+    background-color: red !important; /* Ejemplo: rojo claro */
+}
+#board .cell.hover-par:hover {
+    background-color: #007bff !important; /* Ejemplo: azul claro */
+}
 
 
 .par{
-    background-color: #007bff;
-    box-shadow: 2px 2px 6px #007bff;
+    color: #007bff;
 }
 
 .impar{
-    background-color: rgba(255, 0, 0, 0.548) ;
-    box-shadow: 2px 2px 6px rgba(255, 0, 0, 0.548);
-
+    color: red;
 }
 
 #board .num{
@@ -96,6 +104,8 @@ body{
 
 /*boton*/
 .button {
+  position: relative;
+  bottom: 20px;
   /* in scss with just one variable i can change opacity with rgba(variable, opacity) but in css it's not possible so i have used three seperate variables */
   /* with hue-rotate color can be changed */
   --main-color: rgb(46, 213, 115);
