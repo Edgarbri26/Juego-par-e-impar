@@ -1,18 +1,18 @@
 @import "tailwindcss/preflight";
 @import "tailwindcss/utilities";
 
-@layer components {
+/*@layer components {
     .impar {
-        @apply text-red-500;
+         @apply text-secondary;
     }
     .par {
-        @apply text-blue-500;
+        @apply text-primary;
     }
     .hover-impar:hover {
-        @apply bg-red-500;
+        @apply bg-secondary;
     }
     .hover-par:hover {
-        @apply bg-blue-500;
+        @apply bg-primary;
     }
     .show {
         @apply block !important;
@@ -40,7 +40,7 @@
     .button:active {
         filter: hue-rotate(250deg);
     }
-}
+}*/
 
 @theme {
     --color-primary: #007bff;
@@ -52,6 +52,6 @@
     --color-dark: #212121;
 }
 
-.cell{
-    @apply bg-dark flex justify-center items-center text-7xl cursor-pointer relative;
-}
+/*    .cell{
+        @apply bg-dark flex justify-center items-center text-7xl cursor-pointer relative;
+    }*/

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Div en forma de X con Tailwind</title>
+  <link rel="stylesheet" href="assets/output.css">
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+  <article class="relative w-48 h-48 bg-blue-500 p-1">
+    <div class="absolute w-2 h-48 bg-red-500 top-0 left-1/2 transform -translate-s-1/2 rotate-90"></div>
+    <div class="absolute w-2 h-48 bg-red-500 top-0 left-1/2 transform -translate-x-1/2 -rotate-45"></div>
+  </article>
+</body>
+</html>

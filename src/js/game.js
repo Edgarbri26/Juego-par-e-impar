@@ -8,19 +8,19 @@ let arrayPar = [];
 
     resetGame(); // Inicializar el juego
 
-    window.addEventListener('DOMContentLoaded', () => {
-        jugadorEfectoHover();
-        let reloadCount = parseInt(localStorage.getItem('reloadCount') || '0', 10);
+    // window.addEventListener('DOMContentLoaded', () => {
+    //     jugadorEfectoHover();
+    //     let reloadCount = parseInt(localStorage.getItem('reloadCount') || '0', 10);
 
-        reloadCount += 1;
-        localStorage.setItem('reloadCount', reloadCount);
+    //     reloadCount += 1;
+    //     localStorage.setItem('reloadCount', reloadCount);
 
-        if (reloadCount === 2) {
-            // Redirige solo en la segunda recarga
-            localStorage.removeItem('reloadCount'); // Limpia el contador para futuras recargas
-            window.location.href = "inicio.html"; // Cambia por la ruta que necesites
-        }
-    });
+    //     if (reloadCount === 2) {
+    //         // Redirige solo en la segunda recarga
+    //         localStorage.removeItem('reloadCount'); // Limpia el contador para futuras recargas
+    //         window.location.href = "inicio.html"; // Cambia por la ruta que necesites
+    //     }
+    // });
 
 contents.forEach((content, index) => {
     updateCells(content); 
