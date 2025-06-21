@@ -4,34 +4,31 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Par o Impar</title>
-        <link rel="stylesheet" href="src/css/bootstrap.min.css">
-        <link rel="stylesheet" href="src/css/inicio.css">
+        <link rel="stylesheet" href="assets/output.css">
     </head>
-    <body>
-        <footer class="container-fluid text-white text-center py-3">
-            <h1>Juega <span class="text-primary">Par</span> o <span class="text-danger">Impar</span></h1>
-        </footer>
+    <body class="bg-dark flex flex-col items-center justify-center min-h-screen text-white font-sans">
+        <header class="w-full text-center py-3">
+            <h1 class="text-5xl font-bold">Juega <span class="text-primary">Par</span> o <span class="text-secondary">Impar</span></h1>
+        </header>
 
-        <div id="game-description" class="container-xl text-center">
-            <div>
-                <article>
-                    <img src="img/2.jpg" alt="Una imagen de par e impar" height="250">
-                     <p>
+        <main id="game-description" class="max-w-4xl text-center p-5">
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <img src="img/2.jpg" alt="Una imagen de par e impar" class="w-full md:w-1/2 rounded-lg shadow-lg">
+                <article class="md:w-1/2">
+                     <p class="text-xl mb-6">
                          ¿Tienes instinto para los números? ¿Eres capaz de anticipar el resultado en un abrir
-                         y cerrar de ojos? ¡Entonces Par o Impar es tu desafío perfecto! Un juego rápido,
-                         adictivo y lleno de emoción te espera. Demuestra tu agilidad mental, reta a
-                         tus contrincantes y conviértete en el maestro del par y el impar.
-                         ¡No esperes más, la diversión te está llamando!
-
+                        y cerrar de ojos? ¡Entonces Par o Impar es tu desafío perfecto! Un juego rápido,
+                        adictivo y lleno de emoción te espera. Demuestra tu agilidad mental, reta a
+                        tus contrincantes y conviértete en el maestro del par y el impar.
+                        ¡No esperes más, la diversión te está llamando!
                      </p>
+                     <button type="button" class="bg-blue-400 hover:bg-primary text-white font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider" onclick="redirigirAlJuego()">
+                        JUGAR
+                    </button>
                 </article>
-
-                <button type="button" class="btn btn-primary  btn-lg" onclick="redirigirAlJuego()" ><span>JUGAR</span></button>
             </div>
-        </div>
+        </main>
 
-
-        <script src="src/js/bootstrap.bundle.min.js"></script>
         <script>
             function redirigirAlJuego() {
                 window.location.href = "index.html";
