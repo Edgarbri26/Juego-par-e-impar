@@ -1,0 +1,23 @@
+{
+  "name": "juego-par-impar",
+  "version": "1.0.0",
+  "description": "como el 3 en raya pero con numeros",
+  "main": "index.js",
+  "scripts": {
+    "build": "pnpx  @tailwindcss/cli -i ./input.css -o ./assets/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Edgarbri26/Juego-par-e-impar.git"
+  },
+  "author": "Edgar Briceño, Iverson Vargas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Edgarbri26/Juego-par-e-impar/issues"
+  },
+  "homepage": "https://github.com/Edgarbri26/Juego-par-e-impar#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.10",
+    "tailwindcss": "^4.1.10"
+  }
+}

@@ -1,0 +1,57 @@
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
+
+@layer components {
+    .impar {
+        @apply text-red-500;
+    }
+    .par {
+        @apply text-blue-500;
+    }
+    .hover-impar:hover {
+        @apply bg-red-500;
+    }
+    .hover-par:hover {
+        @apply bg-blue-500;
+    }
+    .show {
+        @apply block !important;
+    }
+    .content {
+        @apply hidden;
+    }
+    .button {
+        @apply relative bottom-[-20px] cursor-pointer uppercase tracking-[0.5rem] p-4 px-12 font-bold text-2xl transition-all duration-200 ease-in-out;
+        --main-color: rgb(46, 213, 115);
+        --main-bg-color: rgba(46, 213, 116, 0.36);
+        --pattern-color: rgba(46, 213, 116, 0.073);
+        filter: hue-rotate(0deg);
+        background: radial-gradient( circle, var(--main-bg-color) 0%, rgba(0, 0, 0, 0) 95% ), linear-gradient(var(--pattern-color) 1px, transparent 1px), linear-gradient(to right, var(--pattern-color) 1px, transparent 1px);
+        background-size: cover, 15px 15px, 15px 15px;
+        background-position: center center, center center, center center;
+        border-image: radial-gradient( circle, var(--main-color) 0%, rgba(0, 0, 0, 0) 100% ) 1;
+        border-width: 1px 0 1px 0;
+        color: var(--main-color);
+    }
+      
+    .button:hover {
+        background-size: cover, 10px 10px, 10px 10px;
+    }
+    .button:active {
+        filter: hue-rotate(250deg);
+    }
+}
+
+@theme {
+    --color-primary: #007bff;
+    --color-secondary: red;
+    --color-success: #28a745;
+    --color-danger: #dc3545;
+    --color-warning: #ffc107;
+    --color-light: #f8f9fa;
+    --color-dark: #212121;
+}
+
+.cell{
+    @apply bg-dark flex justify-center items-center text-7xl cursor-pointer relative;
+}
