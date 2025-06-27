@@ -1,5 +1,6 @@
-@import "tailwindcss/preflight";
-@import "tailwindcss/utilities";
+@import "tailwindcss";
+@plugin "@midudev/tailwind-animations";
+/*@import "tailwindcss/utilities";*/
 
 /*@layer components {
     .impar {
@@ -52,6 +53,7 @@
     --color-dark: #212121;
 }
 
-/*    .cell{
-        @apply bg-dark flex justify-center items-center text-7xl cursor-pointer relative;
-    }*/
+.cell{
+    @apply bg-dark flex justify-center items-center text-7xl cursor-pointer relative overflow-hidden;
+}
+
