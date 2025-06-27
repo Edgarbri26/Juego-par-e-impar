@@ -1,6 +1,8 @@
 @import "tailwindcss/preflight";
 @import "tailwindcss/utilities";
 
+/* para meterle css con talwin primero hay que ejecutarlo y el comando es npm run build  */
+
 @layer components {
     .impar {
         @apply text-red-500;
