@@ -1,67 +1,117 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="src/css/game.css">
+    <!-- <link rel="stylesheet" href="src/css/game.css"> -->
+    <link rel="stylesheet" href="assets/output.css">
     <title>Par impar</title>
 </head>
-<body>
-    <main class="container">
-        <section class="game-section">
-            <h2 class="player" id="player">Jugador Impar</h2>
-            <div id="board">
 
+<body class="bg-dark text-white font-sans">
+    <main class="container min-h-screen flex flex-col items-center justify-center max-w-screen-lg mx-auto">
+        <section class="game-section flex flex-col items-center justify-evenly gap-4 min-h-screen w-full p-8">
+            <article>
+                <label for="modo-select" class="block mb-2 text-lg">Modo de juego:</label>
+                <select id="modo-select" class="mb-4 p-2 rounded text-white">
+                    <option value="pvp">Jugador vs Jugador</option>
+                    <option value="cpu">Jugador vs Computadora</option>
+                    <option value="online">Online</option>
+                </select>
+                <form id="online-form" class="mb-4 flex flex-col gap-2 hidden">
+                    <label for="codigo-sala" class="text-base">Código de sala:</label>
+                    <input id="codigo-sala" type="text" class="p-2 rounded text-white" placeholder="Ej: sala123">
+                    <div class="flex gap-2">
+                        <button id="btn-crear-sala" type="button" class="bg-blue-500 text-white px-4 py-2 rounded">Crear sala</button>
+                        <button id="btn-unirse-sala" type="button" class="bg-green-500 text-white px-4 py-2 rounded">Unirse</button>
+                    </div>
+                    <div id="online-msg" class="text-sm text-center"></div>
+                    <button type="submit" class="hidden">Submit</button>
+                </form>
+                <label for="partidas-select" class="block mb-2 text-lg">Jugar al mejor de:</label>
+                <select id="partidas-select" class="mb-4 p-2 rounded text-white">
+                    <option value="1">1 partida</option>
+                    <option value="3">3 partidas</option>
+                    <option value="5">5 partidas</option>
+                </select>
+                <h2 class="player text-2xl font-bold text-center" id="player">Jugador <span class="text-blue-500">Impar</span></h2>
+                <button id="btn-reset" type="button" class="button text-white bg-primary rounded-b-lg p-3 px-4 py-2 hover:bg-primary/80 transition-all duration-300" onclick="resetGame()">reiniciar</button>
+            </article>
+
+            <article id="board"
+                class="grid grid-cols-3 gap-4 max-w-xl w-full aspect-square bg-white rounded-2xl relative">
+                <div id="linea-ganadora" class="absolute pointer-events-none w-full h-full z-20"></div>
                 <div class="cell" id="c1">
-                    <select class="content hiden" name="cell1" id="cell1" ></select>
-                    <label class="num" for="cell1" ></label>
+                    <select class="absolute content w-full h-full hidden text-2xl text-center text-white  z-10"
+                        name="cell1" id="cell1"></select>
+                    <label class="num h-full w-full flex justify-center items-center absolute z-1" for="cell1"></label>
                 </div>
 
                 <div class="cell" id="c2">
-                    <select class="content hiden" name="cell2" id="cell2"></select>
-                    <label class="num" for="cell2" ></label>
+                    <select
+                        class="absolute content w-full h-full hidden text-2xl text-center text-white  z-10"
+                        name="cell2" id="cell2"></select>
+                    <label class="num h-full w-full flex justify-center items-center absolute z-1" for="cell2"></label>
                 </div>
 
                 <div class="cell" id="c3">
-                    <select class="content hiden" name="cell3" id="cell3"></select>
-                    <label class="num" for="cell3" ></label>
+                    <select
+                        class="absolute content w-full h-full hidden text-2xl text-center text-white  z-10"
+                        name="cell3" id="cell3"></select>
+                    <label class="num h-full w-full flex justify-center items-center absolute z-1" for="cell3"></label>
                 </div>
 
                 <div class="cell" id="c4">
-                    <select class="content hiden" name="cell4" id="cell4"></select>
-                    <label class="num" for="cell4" ></label>
+                    <select
+                        class="absolute content w-full h-full hidden text-2xl text-center text-white  z-10"
+                        name="cell4" id="cell4"></select>
+                    <label class="num h-full w-full flex justify-center items-center absolute z-1" for="cell4"></label>
                 </div>
 
                 <div class="cell" id="c5">
-                    <select class="content hiden" name="cell5" id="cell5"></select>
-                    <label class="num" for="cell5" ></label>
+                    <select
+                        class="absolute content w-full h-full hidden text-2xl text-center text-white  z-10"
+                        name="cell5" id="cell5"></select>
+                    <label class="num h-full w-full flex justify-center items-center absolute z-1" for="cell5"></label>
                 </div>
 
                 <div class="cell" id="c6">
-                    <select class="content hiden" name="cell6" id="cell6"></select>
-                    <label class="num" for="cell6" ></label>
+                    <select
+                        class="absolute content w-full h-full hidden text-2xl text-center text-white  z-10"
+                        name="cell6" id="cell6"></select>
+                    <label class="num h-full w-full flex justify-center items-center absolute z-1" for="cell6"></label>
                 </div>
 
                 <div class="cell" id="c7">
-                    <select class="content hiden" name="cell7" id="cell7"></select>
-                    <label class="num" for="cell7" ></label>
+                    <select
+                        class="absolute content w-full h-full hidden text-2xl text-center text-white  z-10"
+                        name="cell7" id="cell7"></select>
+                    <label class="num h-full w-full flex justify-center items-center absolute z-1" for="cell7"></label>
                 </div>
 
                 <div class="cell" id="c8">
-                    <select class="content hiden" name="cell8" id="cell8"></select>
-                    <label class="num" for="cell8" ></label>
+                    <select
+                        class="absolute content w-full h-full hidden text-2xl text-center text-white  z-10"
+                        name="cell8" id="cell8"></select>
+                    <label class="num h-full w-full flex justify-center items-center absolute z-1" for="cell8"></label>
                 </div>
 
                 <div class="cell" id="c9">
-                    <select class="content hiden" name="cell9" id="cell9"></select>
-                    <label class="num" for="cell9" ></label>
+                    <select
+                        class="absolute content w-full h-full hidden text-2xl text-center text-white  z-10"
+                        name="cell9" id="cell9"></select>
+                    <label class="num h-full w-full flex justify-center items-center absolute z-1" for="cell9"></label>
                 </div>
-            </div>
+            </article>
 
-            <button id="btn-reset" type="button" class="button" onclick="resetGame()">reiniciar</button>
+            <div id="marcador" class="text-center text-lg font-bold my-4"></div>
             <div id="resultado"></div>
         </section>
     </main>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="src/js/celdaJuego.js"></script>
     <script src="src/js/game.js"></script>
 </body>
+
 </html>

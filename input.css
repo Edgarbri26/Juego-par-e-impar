@@ -1,20 +1,22 @@
-@import "tailwindcss/preflight";
-@import "tailwindcss/utilities";
+@import "tailwindcss";
+@plugin "@midudev/tailwind-animations";
+/*@import "tailwindcss/utilities";*/
 
 /* para meterle css con talwin primero hay que ejecutarlo y el comando es npm run build  */
 
-@layer components {
+/*@layer components {
+ cadb7ba59d7f209e9f59e21c92a289fb3b95a401
     .impar {
-        @apply text-red-500;
+         @apply text-secondary;
     }
     .par {
-        @apply text-blue-500;
+        @apply text-primary;
     }
     .hover-impar:hover {
-        @apply bg-red-500;
+        @apply bg-secondary;
     }
     .hover-par:hover {
-        @apply bg-blue-500;
+        @apply bg-primary;
     }
     .show {
         @apply block !important;
@@ -42,7 +44,7 @@
     .button:active {
         filter: hue-rotate(250deg);
     }
-}
+}*/
 
 @theme {
     --color-primary: #007bff;
@@ -55,5 +57,5 @@
 }
 
 .cell{
-    @apply bg-dark flex justify-center items-center text-7xl cursor-pointer relative;
+    @apply bg-dark flex justify-center items-center text-7xl cursor-pointer relative overflow-hidden;
 }
