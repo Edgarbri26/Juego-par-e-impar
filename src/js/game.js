@@ -5,20 +5,20 @@ let board = document.getElementById('board')
 let playerTurn = true;
 let arrayImpar = [];
 let arrayPar = [];
+let modoJuego = null; // "pvp" o "cpu"
 
     resetGame(); // Inicializar el juego
 
     window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('overlay').classList.remove('oculto'); // Mostrar modal al inicio
+        document.body.classList.add('modal-abierto'); // Bloquear scroll de fondo
         jugadorEfectoHover();
         let reloadCount = parseInt(localStorage.getItem('reloadCount') || '0', 10);
-
         reloadCount += 1;
         localStorage.setItem('reloadCount', reloadCount);
-
         if (reloadCount === 2) {
-            // Redirige solo en la segunda recarga
-            localStorage.removeItem('reloadCount'); // Limpia el contador para futuras recargas
-            window.location.href = "inicio.html"; // Cambia por la ruta que necesites
+            localStorage.removeItem('reloadCount');
+            window.location.href = "inicio.html";
         }
     });
 
@@ -55,6 +55,12 @@ contents.forEach((content, index) => {
         }
         label = labels[index];
         label.removeEventListener("click", showSelect); // Elimina el evento click para evitar múltiples activaciones
+        // --- Si es modo CPU y es turno de la PC, que juegue ---
+        setTimeout(() => {
+            if (modoJuego === "cpu" && !playerTurn && mensaje.innerHTML === "") {
+                turnoPC();
+            }
+        }, 500);
     });
 });
 
@@ -192,5 +198,31 @@ function jugadorEfectoHover() {
                 cell.classList.add('hover-par');
             }
         });
+    }
+}
+
+function seleccionarModo(modo) {
+    modoJuego = modo;
+    document.getElementById('overlay').classList.add('oculto'); // Ocultar modal
+    document.body.classList.remove('modal-abierto'); // Quitar clase para permitir scroll
+    resetGame();
+}
+window.seleccionarModo = seleccionarModo; // Para acceso desde HTML
+
+function turnoPC() {
+    // La PC es el jugador PAR
+    if (!playerTurn && modoJuego === "cpu") {
+        let celdasDisponibles = [];
+        labels.forEach((label, idx) => {
+            if (!label.textContent) celdasDisponibles.push(idx);
+        });
+        if (celdasDisponibles.length === 0) return;
+        let idx = celdasDisponibles[Math.floor(Math.random() * celdasDisponibles.length)];
+        let select = contents[idx];
+        let opciones = Array.from(select.options).map(opt => parseInt(opt.value)).filter(n => n);
+        if (opciones.length === 0) return;
+        let numElegido = opciones[Math.floor(Math.random() * opciones.length)];
+        select.value = numElegido;
+        select.dispatchEvent(new Event('change'));
     }
 }

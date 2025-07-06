@@ -156,3 +156,59 @@ body{
 .button:active {
   filter: hue-rotate(250deg);
 }
+
+#overlay {
+  z-index: 3000 !important;
+  display: flex;
+}
+#overlay.oculto {
+  display: none !important;
+}
+
+body.modal-abierto {
+  overflow: hidden;
+}
+
+/* Mejoras visuales para el modal de selección de modo */
+#modoModal {
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  border: none;
+}
+
+#modoModal .modal-body {
+  padding: 2.5rem 1.5rem;
+}
+
+.card.cursor-pointer {
+  transition: transform 0.15s, box-shadow 0.15s;
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.card.cursor-pointer:hover, .card.cursor-pointer:focus {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.16);
+  background: #f8f9fa;
+}
+
+.icon-large {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.card-body span {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  #modoModal {
+    max-width: 98vw;
+    padding: 0.5rem;
+  }
+  #modoModal .modal-body {
+    padding: 1rem 0.5rem;
+  }
+}
