@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Seleccionar Modo de Juego</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div id="modal" class="bg-white p-10 rounded-2xl shadow-2xl text-center max-w-xl w-full">
+    <h2 class="text-3xl font-bold mb-8 text-gray-800">Selecciona el modo de juego</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div onclick="seleccionarModo('cpu')" class="cursor-pointer bg-green-100 hover:bg-green-200 p-6 rounded-xl shadow-md flex flex-col items-center transition">
+        <i class="ph ph-cpu text-5xl text-green-600 mb-4"></i>
+        <span class="text-xl font-semibold text-green-800">Contra la PC</span>
+      </div>
+      <div onclick="seleccionarModo('vs')" class="cursor-pointer bg-blue-100 hover:bg-blue-200 p-6 rounded-xl shadow-md flex flex-col items-center transition">
+        <i class="ph ph-users-three text-5xl text-blue-600 mb-4"></i>
+        <span class="text-xl font-semibold text-blue-800">Jugador vs Jugador</span>
+      </div>
+      <div onclick="seleccionarModo('online')" class="cursor-pointer bg-purple-100 hover:bg-purple-200 p-6 rounded-xl shadow-md flex flex-col items-center transition">
+        <i class="ph ph-globe text-5xl text-purple-600 mb-4"></i>
+        <span class="text-xl font-semibold text-purple-800">Modo Online</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function seleccionarModo(modo) {
+      alert("Modo seleccionado: " + modo);
+      document.getElementById("modal").classList.add('hidden');
+      // window.location.href = `juego.html?modo=${modo}`;
+    }
+  </script>
+</body>
+</html>

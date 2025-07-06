@@ -1,0 +1,49 @@
+body {
+    background-color: #212121;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;    
+    border: 0px;
+     font-family: fantasy;
+}
+ 
+img {
+    height: 300px;
+    right: 25px;
+    position: relative;
+}
+h1 {
+    position: relative;
+    right: 20px;
+    color: white;
+    text-align: center;
+    font-size: 50px;
+}
+
+#game-description {
+    font-size: 1.2em;
+    text-align: center;
+    position: relative;
+    bottom: 10px;
+    height: 450px;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+}
+
+p {
+    color: rgba(255, 255, 255, 0.918);
+    text-align: center;
+    position: relative;
+    top: 20px;
+    font-size: 20px;
+}
+
+button {
+    position: relative;
+    top: 25px;
+    right: 20px;
+    width: 200px;
+}
+

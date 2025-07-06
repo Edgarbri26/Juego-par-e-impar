@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', function() {
+// --- INICIO DEL CÓDIGO ORIGINAL ---
 const contents = document.querySelectorAll('.content');
 const labels = document.querySelectorAll('.num');
 let player = document.getElementById('player');
@@ -30,6 +32,29 @@ const boardSection = document.getElementById('board');
 // Estado para saber si el juego online está listo
 let onlineListo = false;
 
+// Elementos del modal
+const modoModal = document.getElementById('modoModal');
+const juegoContainer = document.getElementById('juegoContainer');
+
+// Función para seleccionar modo de juego
+function seleccionarModo(modo) {
+    modoJuego = modo;
+    // Ocultar overlay y modal
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.style.display = 'none';
+    // Mostrar juego
+    juegoContainer.classList.remove('d-none');
+    // Configurar formulario online si es necesario
+    if (modoJuego === 'online') {
+        if (onlineForm) onlineForm.classList.remove('d-none');
+    } else {
+        if (onlineForm) onlineForm.classList.add('d-none');
+    }
+    // Reiniciar juego con el nuevo modo
+    resetMarcador();
+    resetGame();
+}
+
 function mostrarTableroOnline(mostrar) {
     if (boardSection) {
         boardSection.style.pointerEvents = mostrar ? 'auto' : 'none';
@@ -37,7 +62,7 @@ function mostrarTableroOnline(mostrar) {
     }
     // También puedes ocultar los selects si no está listo
     contents.forEach((content) => {
-        if (!mostrar) content.classList.add('hidden');
+        if (!mostrar) content.classList.add('d-none');
     });
 }
 
@@ -55,9 +80,9 @@ if (modoSelect) {
         resetMarcador();
         resetGame();
         if (modoJuego === 'online') {
-            if (onlineForm) onlineForm.classList.remove('hidden');
+            if (onlineForm) onlineForm.classList.remove('d-none');
         } else {
-            if (onlineForm) onlineForm.classList.add('hidden');
+            if (onlineForm) onlineForm.classList.add('d-none');
         }
     });
 }
@@ -122,14 +147,14 @@ labels.forEach((label) => {
 function ocultarSelect() {
     const selects = document.querySelectorAll('select');
     selects.forEach(select => {
-        select.classList.add('hidden');
+        select.classList.add('d-none');
     });
 }
 
 function mostrarSelect() {
     const selects = document.querySelectorAll('select');
     selects.forEach(select => {
-        select.classList.remove('hidden');
+        select.classList.remove('d-none');
     });
 }
 
@@ -164,7 +189,7 @@ contents.forEach((content, index) => {
         updateCells();
         
         // Ocultar el select después de seleccionar
-        event.target.classList.add('hidden');
+        event.target.classList.add('d-none');
         
         playerTurn? player.textContent = "Jugador Impar" : player.textContent = "Jugador Par";
         const mensaje = document.getElementById('resultado');
@@ -211,7 +236,7 @@ function resetGame() {
 
     contents.forEach((content) => {
         content.innerHTML = ""; // Limpiar el select
-        content.classList.add('hidden'); // Ocultar el select
+        content.classList.add('d-none'); // Ocultar el select
         updateCells(content); // Llamar a la función para actualizar las celdas
     });
 
@@ -245,11 +270,11 @@ function showSelect(event) {
     
     // Ocultar todos los selects primero
     contents.forEach((content) => {
-        content.classList.add('hidden');
+        content.classList.add('d-none');
     });
 
     if (select) { // Verifica que el select exista
-        select.classList.remove('hidden'); // Mostrar solo el select clickeado
+        select.classList.remove('d-none'); // Mostrar solo el select clickeado
         select.size = select.options.length; // Expande el menú desplegable
         select.focus(); // Enfoca el select automáticamente
     }
@@ -363,37 +388,37 @@ function dibujarLineaGanadora(combo, ganador) {
     const linea = document.getElementById('linea-ganadora');
     if (!linea) return;
     linea.innerHTML = '';
-    let color = ganador === 'Impar' ? 'bg-blue-500' : 'bg-green-500';
-    let clases = 'absolute rounded-2xl z-30 animate-zoom-in ' + color;
+    let color = ganador === 'Impar' ? 'bg-primary' : 'bg-success';
+    let clases = 'position-absolute rounded-3' + ' ' + color;
     switch (combo.toString()) {
         case '1,2,3':
-            clases += ' top-[16.66%] left-0 w-full h-2';
+            clases += ' top-25 start-0 w-100';
             break;
         case '4,5,6':
-            clases += ' top-1/2 left-0 w-full h-2 -translate-y-1/2';
+            clases += ' top-50 start-0 w-100 translate-middle-y';
             break;
         case '7,8,9':
-            clases += ' bottom-[16.66%] left-0 w-full h-2';
+            clases += ' bottom-25 start-0 w-100';
             break;
         case '1,4,7':
-            clases += ' left-[16.66%] top-0 h-full w-2';
+            clases += ' start-25 top-0 h-100';
             break;
         case '2,5,8':
-            clases += ' left-1/2 top-0 h-full w-2 -translate-x-1/2';
+            clases += ' start-50 top-0 h-100 translate-middle-x';
             break;
         case '3,6,9':
-            clases += ' right-[16.66%] top-0 h-full w-2';
+            clases += ' end-25 top-0 h-100';
             break;
         case '1,5,9':
-            clases += ' left-1/2 top-1/2 w-full h-2 -translate-x-1/2  rotate-45';
+            clases += ' start-50 top-50 w-100 translate-middle rotate-45';
             break;
         case '3,5,7':
-            clases += ' left-1/2 top-1/2 w-full h-2 -translate-x-1/2  -rotate-45';
+            clases += ' start-50 top-50 w-100 translate-middle -rotate-45';
             break;
         default:
             return;
     }
-    linea.innerHTML = `<div class='${clases}'></div>`;
+    linea.innerHTML = `<div class='${clases}' style='height: 8px;'></div>`;
 }
 
 function limpiarLineaGanadora() {
@@ -499,3 +524,6 @@ if (socket) {
         // Aquí puedes mostrar el tablero y habilitar la jugada
     });
 }
+
+window.seleccionarModo = seleccionarModo;
+});
