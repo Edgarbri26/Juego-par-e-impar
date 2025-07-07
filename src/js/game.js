@@ -62,11 +62,14 @@ contents.forEach((content, index) => {
         if (!mensaje.innerHTML == "") {
             player.innerText = `El Juego a Terminado`;
         }
-        setTimeout(() => {
-            if (modoJuego === "cpu" && !playerTurn && mensaje.innerHTML === "") {
+        // LOG de depuración para modo vs PC
+        console.log('modoJuego:', modoJuego, 'playerTurn:', playerTurn);
+        if (modoJuego === "cpu" && !playerTurn && mensaje.innerHTML === "") {
+            console.log('Llamando a turnoPC()');
+            setTimeout(() => {
                 turnoPC();
-            }
-        }, 500);
+            }, 500);
+        }
     });
 });
 
@@ -110,8 +113,9 @@ function resetGame() {
     const linea = document.getElementById('linea-ganadora');
     if (linea) linea.innerHTML = '';
     ocultarModalGanador();
-    let modalFinal = document.getElementById('mensaje-ganador-final');
-    if (modalFinal) modalFinal.remove();
+    // NO eliminar el modal de ganador de la serie aquí
+    // let modalFinal = document.getElementById('mensaje-ganador-final');
+    // if (modalFinal) modalFinal.remove();
 
     playerTurn = true;
     arrayImpar = ["", 1, 3, 5, 7, 9];
@@ -234,20 +238,21 @@ function mostrarModalGanador(ganador) {
     const modal = document.createElement('div');
     modal.id = 'mensaje-ganador';
     modal.className = 'mensaje-ganador ' + (ganador === 'Par' ? 'par' : ganador === 'Impar' ? 'impar' : 'empate');
+    const idioma = getIdiomaActual();
     let mensaje = '';
     if (ganador === 'Empate') {
-        mensaje = '🤝 ¡La partida ha terminado en empate!';
+        mensaje = traduccionesJuego[idioma].empate;
     } else if (ganador === 'Par') {
-        mensaje = '🎉 ¡El jugador Par ha ganado la partida! 🎉';
+        mensaje = traduccionesJuego[idioma].ganadorPar;
     } else {
-        mensaje = '🎉 ¡El jugador Impar ha ganado la partida! 🎉';
+        mensaje = traduccionesJuego[idioma].ganadorImpar;
     }
     // Verificar si ya hay ganador de la serie
     let necesario = Math.ceil(mejorDe / 2);
     let hayGanadorSerie = (victoriasImpar >= necesario || victoriasPar >= necesario);
     let botonSiguiente = '';
     if (!hayGanadorSerie) {
-        botonSiguiente = '<button class="btn-siguiente-ronda" onclick="siguienteRonda()">▶ Siguiente ronda</button>';
+        botonSiguiente = `<button class="btn-siguiente-ronda" onclick="siguienteRonda()">${traduccionesJuego[idioma].btnSiguiente}</button>`;
     }
     modal.innerHTML = `<h2>${mensaje}</h2>${botonSiguiente}`;
     document.body.appendChild(modal);
@@ -311,7 +316,7 @@ function jugadorEfectoHover() {
 }
 
 function seleccionarModo(modo) {
-    modoJuego = modo;
+    modoJuego = modo; // Asegura que se setea correctamente
     // Leer el valor del selector mejorDe
     const selectMejorDe = document.getElementById('mejorDe');
     mejorDe = parseInt(selectMejorDe.value, 10);
@@ -396,25 +401,128 @@ function dibujarLineaGanadora(combo, ganador) {
     }, 10);
 }
 
+// --- Traducciones globales ---
+const traduccionesJuego = {
+    es: {
+        marcador: 'Marcador de la serie:',
+        impar: 'Impar',
+        par: 'Par',
+        mejorDe: '(Mejor de',
+        jugador: 'Jugador',
+        jugadorImpar: 'Jugador Impar',
+        jugadorPar: 'Jugador Par',
+        ganadorImpar: '🎉 ¡El jugador Impar ha ganado la partida! 🎉',
+        ganadorPar: '🎉 ¡El jugador Par ha ganado la partida! 🎉',
+        empate: '🤝 ¡La partida ha terminado en empate!',
+        btnSiguiente: '▶ Siguiente ronda',
+        btnVolver: 'Volver al inicio',
+        btnRevancha: 'Revancha',
+        ganadorSerieImpar: '🏆 ¡El jugador Impar ha ganado la serie! 🏆',
+        ganadorSeriePar: '🏆 ¡El jugador Par ha ganado la serie! 🏆',
+    },
+    en: {
+        marcador: 'Series score:',
+        impar: 'Odd',
+        par: 'Even',
+        mejorDe: '(Best of',
+        jugador: 'Player',
+        jugadorImpar: 'Odd Player',
+        jugadorPar: 'Even Player',
+        ganadorImpar: '🎉 Odd Player has won the game! 🎉',
+        ganadorPar: '🎉 Even Player has won the game! 🎉',
+        empate: '🤝 The game ended in a draw!',
+        btnSiguiente: '▶ Next round',
+        btnVolver: 'Back to start',
+        btnRevancha: 'Rematch',
+        ganadorSerieImpar: '🏆 Odd Player has won the series! 🏆',
+        ganadorSeriePar: '🏆 Even Player has won the series! 🏆',
+    }
+};
+
+function getIdiomaActual() {
+    return localStorage.getItem('idioma') || 'es';
+}
+
+function actualizarMarcadorSerie() {
+    let marcador = document.getElementById('marcador-serie');
+    if (!marcador) {
+        marcador = document.createElement('div');
+        marcador.id = 'marcador-serie';
+        marcador.style.textAlign = 'center';
+        marcador.style.fontWeight = 'bold';
+        marcador.style.fontSize = '1.2rem';
+        marcador.style.margin = '1rem auto';
+        document.querySelector('main.container').insertBefore(marcador, document.querySelector('.game-section'));
+    }
+    const idioma = getIdiomaActual();
+    marcador.innerHTML = `${traduccionesJuego[idioma].marcador} <span style='color:#e11d48'>${traduccionesJuego[idioma].impar}</span> ${victoriasImpar} - ${victoriasPar} <span style='color:#0d6efd'>${traduccionesJuego[idioma].par}</span> <br> ${traduccionesJuego[idioma].mejorDe} ${mejorDe})`;
+}
+
 function actualizarJugadorHeader() {
     const jugadorSpan = document.getElementById('jugador-impar');
+    const playerHeader = document.getElementById('player');
+    const idioma = getIdiomaActual();
+    if (!jugadorSpan || !playerHeader) return;
     if (playerTurn) {
-        jugadorSpan.textContent = 'Impar';
+        jugadorSpan.textContent = traduccionesJuego[idioma].impar;
         jugadorSpan.style.color = '#e11d48';
+        playerHeader.textContent = `${traduccionesJuego[idioma].jugador} ${traduccionesJuego[idioma].impar}`;
     } else {
-        jugadorSpan.textContent = 'Par';
+        jugadorSpan.textContent = traduccionesJuego[idioma].par;
         jugadorSpan.style.color = '#0d6efd';
+        playerHeader.textContent = `${traduccionesJuego[idioma].jugador} ${traduccionesJuego[idioma].par}`;
     }
+}
+
+// --- Cambio de idioma dinámico ---
+if (typeof window !== 'undefined') {
+    const idiomaSelect = document.getElementById('idioma-select');
+    if (idiomaSelect) {
+        idiomaSelect.addEventListener('change', function() {
+            actualizarMarcadorSerie();
+            actualizarJugadorHeader();
+            // Si hay modal de ganador de ronda abierto, actualizarlo
+            const modalGanador = document.getElementById('mensaje-ganador');
+            if (modalGanador) {
+                // Detectar si fue empate, impar o par
+                let texto = modalGanador.textContent;
+                if (texto.includes('empate') || texto.includes('draw')) {
+                    mostrarModalGanador('Empate');
+                } else if (texto.includes('Par') || texto.includes('Even')) {
+                    mostrarModalGanador('Par');
+                } else {
+                    mostrarModalGanador('Impar');
+                }
+            }
+            // Si hay modal de ganador final abierto, actualizarlo
+            const modalFinal = document.getElementById('mensaje-ganador-final');
+            if (modalFinal) {
+                // Detectar si fue impar o par
+                let texto = modalFinal.textContent;
+                if (texto.includes('Par') || texto.includes('Even')) {
+                    mostrarModalGanadorFinal('Par');
+                } else {
+                    mostrarModalGanadorFinal('Impar');
+                }
+            }
+        });
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+        actualizarMarcadorSerie();
+        actualizarJugadorHeader();
+    });
 }
 
 function verificarGanadorSerie() {
     let necesario = Math.floor(mejorDe / 2) + 1;
     if (victoriasImpar >= necesario) {
         mostrarModalGanadorFinal('Impar');
-        resetGame.reiniciarSerie = true;
+        // NO reiniciar el juego aquí
+        // resetGame.reiniciarSerie = true;
     } else if (victoriasPar >= necesario) {
         mostrarModalGanadorFinal('Par');
-        resetGame.reiniciarSerie = true;
+        // NO reiniciar el juego aquí
+        // resetGame.reiniciarSerie = true;
     }
 }
 
@@ -424,31 +532,31 @@ function mostrarModalGanadorFinal(ganador) {
     const modal = document.createElement('div');
     modal.id = 'mensaje-ganador-final';
     modal.className = 'mensaje-ganador-final ' + (ganador === 'Par' ? 'par' : 'impar');
+    const idioma = getIdiomaActual();
     let mensaje = '';
     if (ganador === 'Par') {
-        mensaje = '🏆 ¡El jugador Par ha ganado la serie! 🏆';
+        mensaje = traduccionesJuego[idioma].ganadorSeriePar;
     } else {
-        mensaje = '🏆 ¡El jugador Impar ha ganado la serie! 🏆';
+        mensaje = traduccionesJuego[idioma].ganadorSerieImpar;
     }
-    // Depuración
-    console.log('Mostrando modal ganador final con botones');
     modal.innerHTML = `<h2>${mensaje}</h2>
         <div class="botones-final">
-            <button class='btn-volver-inicio' onclick="volverAlInicio()">Volver al inicio</button>
-            <button class='btn-revancha' onclick="revancha()">Revancha</button>
+            <button class='btn-volver-inicio' onclick="volverAlInicio()">${traduccionesJuego[idioma].btnVolver}</button>
+            <button class='btn-revancha' onclick="revancha()">${traduccionesJuego[idioma].btnRevancha}</button>
         </div>`;
     document.body.appendChild(modal);
-    // Agregar el CSS de los botones si no existe
+    // Refuerza el CSS de los botones si no existe
     if (!document.getElementById('css-btn-volver-inicio')) {
         const style = document.createElement('style');
         style.id = 'css-btn-volver-inicio';
         style.innerHTML = `
         .botones-final {
             text-align: center;
+            margin-top: 1.5rem;
         }
         .btn-volver-inicio, .btn-revancha {
             display: inline-block;
-            margin: 2rem 1rem 0 1rem;
+            margin: 0 1rem;
             background: #3b82f6;
             color: #fff;
             font-size: 1.3rem;
@@ -488,41 +596,4 @@ function volverAlInicio() {
     // Mostrar el modal de selección de modo
     document.getElementById('overlay').classList.remove('oculto');
     document.body.classList.add('modal-abierto');
-}
-
-function actualizarMarcadorSerie() {
-    let marcador = document.getElementById('marcador-serie');
-    if (!marcador) {
-        marcador = document.createElement('div');
-        marcador.id = 'marcador-serie';
-        marcador.style.textAlign = 'center';
-        marcador.style.fontWeight = 'bold';
-        marcador.style.fontSize = '1.2rem';
-        marcador.style.margin = '1rem auto';
-        document.querySelector('main.container').insertBefore(marcador, document.querySelector('.game-section'));
-    }
-    marcador.innerHTML = `Marcador de la serie: <span style='color:#e11d48'>Impar</span> ${victoriasImpar} - ${victoriasPar} <span style='color:#0d6efd'>Par</span> <br> (Mejor de ${mejorDe})`;
-}
-
-// Refuerza el z-index del modal de ganador final en el CSS
-if (!document.getElementById('css-modal-ganador-final')) {
-    const style = document.createElement('style');
-    style.id = 'css-modal-ganador-final';
-    style.innerHTML = `
-    .mensaje-ganador-final {
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0,0,0,0.8);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        color: #fff;
-        font-size: 2.2rem;
-        font-weight: bold;
-        animation: fadeInScale 0.5s;
-    }
-    `;
-    document.head.appendChild(style);
 }

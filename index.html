@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="src/css/game.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <title>Par impar</title>
     <style>
         .mejor-de-selector {
@@ -22,36 +22,67 @@
             border-radius: 6px;
             font-size: 1rem;
         }
+        .idioma-bar {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding: 1rem 2rem 0 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2000;
+        }
+        .idioma-select {
+            background: #f3f4f6;
+            color: #222;
+            border-radius: 8px;
+            padding: 0.4rem 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border: 1px solid #d1d5db;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            outline: none;
+            transition: border 0.2s;
+        }
+        .idioma-select:focus {
+            border: 1.5px solid #2563eb;
+        }
     </style>
 </head>
 
   <body>
+    <div class="idioma-bar">
+        <select id="idioma-select" class="idioma-select">
+            <option value="es">🇪🇸 Español</option>
+            <option value="en">🇬🇧 English</option>
+        </select>
+    </div>
     <!-- Modal de selección de modo de juego (estilo moderno) -->
     <div id="overlay" class="overlay">
         <div class="modal-modo-juego">
-            <h2 class="modal-title">Selecciona el modo de juego</h2>
+            <h2 class="modal-title" id="modal-title">Selecciona el modo de juego</h2>
             <div class="modal-options">
                 <div class="option-card bg-green" onclick="seleccionarModo('cpu')">
                     <div class="option-icon">
                         <i class="fa-solid fa-robot icono" id="icono-cpu"></i>
                     </div>
-                    <div class="option-text">Contra la PC</div>
+                    <div class="option-text" id="text-cpu">Contra la PC</div>
                 </div>
                 <div class="option-card bg-blue" onclick="seleccionarModo('pvp')">
                     <div class="option-icon">
                         <i class="fa-solid fa-user-group icono" id="icono-pvp"></i>
                     </div>
-                    <div class="option-text">Jugador vs Jugador</div>
+                    <div class="option-text" id="text-pvp">Jugador vs Jugador</div>
                 </div>
                 <div class="option-card bg-purple option-disabled">
                     <div class="option-icon">
                         <i class="fa-solid fa-globe icono" id="icono-online"></i>
                     </div>
-                    <div class="option-text">Modo Online</div>
+                    <div class="option-text" id="text-online">Modo Online</div>
                 </div>
             </div>
             <div class="mejor-de-selector">
-                <label for="mejorDe" class="mejor-de-label">¿Mejor de cuántas partidas?</label>
+                <label for="mejorDe" class="mejor-de-label" id="label-mejor-de">¿Mejor de cuántas partidas?</label>
                 <select id="mejorDe" class="mejor-de-select">
                     <option value="1">1</option>
                     <option value="3">3</option>
@@ -144,5 +175,40 @@
         </section>
     </main>
     <script src="src/js/game.js"></script>
+    <script>
+      const traducciones = {
+        es: {
+          modalTitle: 'Selecciona el modo de juego',
+          cpu: 'Contra la PC',
+          pvp: 'Jugador vs Jugador',
+          online: 'Modo Online',
+          mejorDe: '¿Mejor de cuántas partidas?'
+        },
+        en: {
+          modalTitle: 'Select game mode',
+          cpu: 'Play vs Computer',
+          pvp: 'Player vs Player',
+          online: 'Online Mode',
+          mejorDe: 'Best of how many rounds?'
+        }
+      };
+      function aplicarTraduccionModal(idioma) {
+        document.getElementById('modal-title').textContent = traducciones[idioma].modalTitle;
+        document.getElementById('text-cpu').textContent = traducciones[idioma].cpu;
+        document.getElementById('text-pvp').textContent = traducciones[idioma].pvp;
+        document.getElementById('text-online').textContent = traducciones[idioma].online;
+        document.getElementById('label-mejor-de').textContent = traducciones[idioma].mejorDe;
+      }
+      document.getElementById('idioma-select').addEventListener('change', function() {
+        const idioma = this.value;
+        localStorage.setItem('idioma', idioma);
+        aplicarTraduccionModal(idioma);
+      });
+      window.addEventListener('DOMContentLoaded', () => {
+        const idioma = localStorage.getItem('idioma') || 'es';
+        document.getElementById('idioma-select').value = idioma;
+        aplicarTraduccionModal(idioma);
+      });
+    </script>
   </body>
 </html>
