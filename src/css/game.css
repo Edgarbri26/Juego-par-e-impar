@@ -46,6 +46,17 @@ body{
   align-items: center;
   justify-content: center;
 }
+#overlay {
+  z-index: 3000 !important;
+  display: flex;
+}
+#overlay.oculto {
+  display: none !important;
+}
+
+body.modal-abierto {
+  overflow: hidden;
+}
 #modalJugador {
   position: fixed;
   top: 0;
@@ -284,9 +295,6 @@ body{
 #overlay.oculto {
   display: none !important;
 }
-#modalJugador.oculto {
-  display: none !important;
-}
 
 body.modal-abierto {
   overflow: hidden;
@@ -343,7 +351,7 @@ body.modal-abierto {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.08);
+  background: #212121 !important;
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -479,4 +487,17 @@ body.modal-abierto {
 
 #board {
   position: relative;
+}
+
+.icono{
+  color: #22c55e;
+  font-size: 2rem;
+}
+
+#icono-pvp{
+  color: #007bff;
+}
+
+#icono-online{
+  color:red
 }

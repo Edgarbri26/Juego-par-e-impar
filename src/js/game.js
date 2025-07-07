@@ -6,6 +6,9 @@ let playerTurn = true;
 let arrayImpar = [];
 let arrayPar = [];
 let modoJuego = null; // "pvp" o "cpu"
+let mejorDe = 1;
+let victoriasImpar = 0;
+let victoriasPar = 0;
 
     // (Eliminado: resetGame() fuera de lugar)
 
@@ -28,16 +31,18 @@ contents.forEach((content, index) => {
     updateCells(content); 
 
     content.addEventListener('change', (event) => {
-        const selectedValue = parseInt(event.target.value);
+        const selectedValue = event.target.value;
+        if (selectedValue === "") return; // No hacer nada si es vacío
+        const selectedNumber = parseInt(selectedValue);
         num = document.querySelectorAll('.num')[index];
-        num.textContent = selectedValue; // Actualizar el número en la celda
-        event.target.value = ""; // Limpiar el select
+        num.textContent = selectedNumber;
+        event.target.value = "";
         if (playerTurn) {
-            arrayImpar = arrayImpar.filter(num => num !== selectedValue);
-            let cell = event.target.parentElement; // para seleccionar el elemento padre
+            arrayImpar = arrayImpar.filter(num => num !== selectedNumber);
+            let cell = event.target.parentElement;
             cell.classList.add("impar");
         } else {
-            arrayPar = arrayPar.filter(num => num !== selectedValue);
+            arrayPar = arrayPar.filter(num => num !== selectedNumber);
             let cell = event.target.parentElement;
             cell.classList.add("par");
         }
@@ -45,22 +50,18 @@ contents.forEach((content, index) => {
         let label = labels[index];
         label.removeEventListener("click", showSelect);
         label.style.pointerEvents = "none";
-        event.target.classList.remove("show"); // Ocultar el select
+        event.target.classList.remove("show");
         event.target.disabled = true;
-        
         validarGanador();
-        
-        playerTurn = !playerTurn; // Cambiar turno
+        playerTurn = !playerTurn;
         jugadorEfectoHover();
         updateCells();
         actualizarJugadorHeader();
-        
-        playerTurn? player.textContent = "Jugador Impar" : player.textContent = "Jugador Par";
+        playerTurn ? player.textContent = "Jugador Impar" : player.textContent = "Jugador Par";
         const mensaje = document.getElementById('resultado');
         if (!mensaje.innerHTML == "") {
-            player.innerText = `El Juego a Terminado`
+            player.innerText = `El Juego a Terminado`;
         }
-        // --- Si es modo CPU y es turno de la PC, que juegue ---
         setTimeout(() => {
             if (modoJuego === "cpu" && !playerTurn && mensaje.innerHTML === "") {
                 turnoPC();
@@ -74,24 +75,47 @@ contents.forEach((content, index) => {
 function updateCells() {
     let arrayActual = playerTurn ? arrayImpar : arrayPar;
 
-    contents.forEach((content) => {
+    contents.forEach((content, idx) => {
         content.innerHTML = ""; // Limpiar el select
-        arrayActual.forEach((num) => {
+        // Eliminar mensaje previo si existe
+        let msg = content.parentElement.querySelector('.mensaje-una-opcion');
+        if (msg) msg.remove();
+        // Eliminar clase de resaltado previa
+        content.classList.remove('select-una-opcion');
+        arrayActual.forEach((num, idx) => {
             let newNum = document.createElement("option"); // Crear opción
             newNum.value = num;
             newNum.textContent = num; // Texto visible
             content.appendChild(newNum); // Agregar al select
         });
+        // Si solo queda una opción, resaltar y mostrar mensaje
+        if (arrayActual.length === 1) {
+            content.classList.add('select-una-opcion');
+            let aviso = document.createElement('div');
+            aviso.className = 'mensaje-una-opcion';
+            aviso.textContent = 'Solo queda este número disponible. Haz clic para confirmar.';
+            aviso.style.fontSize = '0.85rem';
+            aviso.style.color = '#fbbf24';
+            aviso.style.textAlign = 'center';
+            aviso.style.marginTop = '0.3rem';
+            content.parentElement.appendChild(aviso);
+        }
     });   
 }
 
-function resetGame() {
-    playerTurn = true;
-    arrayImpar = ["",1, 3, 5, 7, 9];
-    arrayPar = ["",2, 4, 6, 8];
 
-    const Cambiartexto = document.getElementById('btn-reset');
-    Cambiartexto.innerText =`Reiniciar`;
+
+function resetGame() {
+    // Ocultar la línea ganadora y el modal de ganador de ronda
+    const linea = document.getElementById('linea-ganadora');
+    if (linea) linea.innerHTML = '';
+    ocultarModalGanador();
+    let modalFinal = document.getElementById('mensaje-ganador-final');
+    if (modalFinal) modalFinal.remove();
+
+    playerTurn = true;
+    arrayImpar = ["", 1, 3, 5, 7, 9];
+    arrayPar = ["", 2, 4, 6, 8];
 
     contents.forEach((content) => {
         content.innerHTML = ""; // Limpiar el select
@@ -102,9 +126,11 @@ function resetGame() {
     const mensaje = document.getElementById("resultado");
     mensaje.innerHTML = ""; // Limpiar el mensaje de resultado
 
-    labels.forEach((label) => {
+    labels.forEach((label, idx) => {
         label.textContent = ""; // Limpiar el número en la celda
         label.addEventListener("click", showSelect); // Reagregar el evento click
+        label.style.pointerEvents = "auto";
+        if (contents[idx]) contents[idx].disabled = false;
     });
 
     player.textContent = "Jugador Impar";
@@ -115,10 +141,14 @@ function resetGame() {
         cell.classList.remove("par"); // Limpiar la clase de celda par
     });
 
-    // Ocultar la línea ganadora
-    const linea = document.getElementById('linea-ganadora');
-    if (linea) linea.innerHTML = '';
     actualizarJugadorHeader();
+    // Si es la primera partida de la serie, reiniciar los contadores
+    if (typeof resetGame.reiniciarSerie === 'undefined' || resetGame.reiniciarSerie) {
+        victoriasImpar = 0;
+        victoriasPar = 0;
+        actualizarMarcadorSerie();
+        resetGame.reiniciarSerie = false;
+    }
 }
 
 
@@ -165,6 +195,12 @@ function validarGanador() {
             (celdas[a] + celdas[b] + celdas[c] === 15)
         ) {
             const winner = playerTurn ? "Impar" : "Par";
+            if (winner === "Impar") {
+                victoriasImpar++;
+            } else {
+                victoriasPar++;
+            }
+            actualizarMarcadorSerie();
             dibujarLineaGanadora(combo, winner);
             mostrarModalGanador(winner);
             hayGanador = true;
@@ -174,14 +210,19 @@ function validarGanador() {
             labels.forEach((label) => {
               label.removeEventListener("click", showSelect);
             });
+            // Verificar si alguien ya ganó la serie
+            setTimeout(verificarGanadorSerie, 1200);
         }
     });
 
     // Si no hay ganador y todas las celdas tienen valor, es empate
     if (!hayGanador && celdas.slice(1).every(val => val !== null)) {
+        actualizarMarcadorSerie();
         mostrarModalGanador("Empate");
         const Cambiartexto = document.getElementById('btn-reset');
         Cambiartexto.innerText =`Volver a jugar`;
+        // No sumar puntos en empate, pero verificar si hay ganador de la serie (por si mejor de 1)
+        setTimeout(verificarGanadorSerie, 1200);
     }
 }
 
@@ -201,71 +242,54 @@ function mostrarModalGanador(ganador) {
     } else {
         mensaje = '🎉 ¡El jugador Impar ha ganado la partida! 🎉';
     }
-    modal.innerHTML = `<h2>${mensaje}</h2>`;
+    // Verificar si ya hay ganador de la serie
+    let necesario = Math.ceil(mejorDe / 2);
+    let hayGanadorSerie = (victoriasImpar >= necesario || victoriasPar >= necesario);
+    let botonSiguiente = '';
+    if (!hayGanadorSerie) {
+        botonSiguiente = '<button class="btn-siguiente-ronda" onclick="siguienteRonda()">▶ Siguiente ronda</button>';
+    }
+    modal.innerHTML = `<h2>${mensaje}</h2>${botonSiguiente}`;
     document.body.appendChild(modal);
+    // Agregar el CSS del botón si no existe
+    if (!document.getElementById('css-btn-siguiente-ronda')) {
+        const style = document.createElement('style');
+        style.id = 'css-btn-siguiente-ronda';
+        style.innerHTML = `
+        .btn-siguiente-ronda {
+            display: block;
+            margin: 2rem auto 0 auto;
+            background: #22c55e;
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            padding: 0.8rem 2.5rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(34,197,94,0.15);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .btn-siguiente-ronda:hover {
+            background: #16a34a;
+            transform: scale(1.05);
+        }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+function siguienteRonda() {
+    ocultarModalGanador();
+    // Solo reiniciar el tablero, no el marcador de la serie
+    resetGame.reiniciarSerie = false;
+    resetGame();
 }
 
 function ocultarModalGanador() {
     let modal = document.getElementById('mensaje-ganador');
     if (modal) modal.remove();
 }
-
-// Modifica resetGame para ocultar el modal si existe
-const originalResetGame = resetGame;
-resetGame = function() {
-    // Ocultar la línea ganadora
-    const linea = document.getElementById('linea-ganadora');
-    if (linea) linea.innerHTML = '';
-    ocultarModalGanador();
-    originalResetGame();
-}
-
-// Agrega el CSS para el modal de ganador si no existe
-(function(){
-    if (!document.getElementById('css-mensaje-ganador')) {
-        const style = document.createElement('style');
-        style.id = 'css-mensaje-ganador';
-        style.innerHTML = `
-        .mensaje-ganador {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            color: #fff;
-            font-size: 2.2rem;
-            font-weight: bold;
-            animation: fadeInScale 0.5s;
-        }
-        .mensaje-ganador.impar h2 { color: #e11d48; }
-        .mensaje-ganador.par h2 { color: #2563eb; }
-        .mensaje-ganador.empate h2 { color: #fbbf24; }
-        .mensaje-ganador button {
-            margin-top: 2rem;
-            font-size: 1.2rem;
-            padding: 0.7rem 2rem;
-            border-radius: 8px;
-            border: none;
-            background: #fff;
-            color: #222;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        .mensaje-ganador button:hover {
-            background: #f3f4f6;
-        }
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.8);}
-            to { opacity: 1; transform: scale(1);}
-        }
-        `;
-        document.head.appendChild(style);
-    }
-})();
 
 function jugadorEfectoHover() {
     const celdas = document.querySelectorAll('.cell');
@@ -288,8 +312,12 @@ function jugadorEfectoHover() {
 
 function seleccionarModo(modo) {
     modoJuego = modo;
+    // Leer el valor del selector mejorDe
+    const selectMejorDe = document.getElementById('mejorDe');
+    mejorDe = parseInt(selectMejorDe.value, 10);
     document.getElementById('overlay').classList.add('oculto'); // Ocultar modal
     document.body.classList.remove('modal-abierto'); // Quitar clase para permitir scroll
+    resetGame.reiniciarSerie = true;
     resetGame();
 }
 function ocultarModal() {
@@ -377,4 +405,124 @@ function actualizarJugadorHeader() {
         jugadorSpan.textContent = 'Par';
         jugadorSpan.style.color = '#0d6efd';
     }
+}
+
+function verificarGanadorSerie() {
+    let necesario = Math.floor(mejorDe / 2) + 1;
+    if (victoriasImpar >= necesario) {
+        mostrarModalGanadorFinal('Impar');
+        resetGame.reiniciarSerie = true;
+    } else if (victoriasPar >= necesario) {
+        mostrarModalGanadorFinal('Par');
+        resetGame.reiniciarSerie = true;
+    }
+}
+
+function mostrarModalGanadorFinal(ganador) {
+    let modalExistente = document.getElementById('mensaje-ganador-final');
+    if (modalExistente) modalExistente.remove();
+    const modal = document.createElement('div');
+    modal.id = 'mensaje-ganador-final';
+    modal.className = 'mensaje-ganador-final ' + (ganador === 'Par' ? 'par' : 'impar');
+    let mensaje = '';
+    if (ganador === 'Par') {
+        mensaje = '🏆 ¡El jugador Par ha ganado la serie! 🏆';
+    } else {
+        mensaje = '🏆 ¡El jugador Impar ha ganado la serie! 🏆';
+    }
+    // Depuración
+    console.log('Mostrando modal ganador final con botones');
+    modal.innerHTML = `<h2>${mensaje}</h2>
+        <div class="botones-final">
+            <button class='btn-volver-inicio' onclick="volverAlInicio()">Volver al inicio</button>
+            <button class='btn-revancha' onclick="revancha()">Revancha</button>
+        </div>`;
+    document.body.appendChild(modal);
+    // Agregar el CSS de los botones si no existe
+    if (!document.getElementById('css-btn-volver-inicio')) {
+        const style = document.createElement('style');
+        style.id = 'css-btn-volver-inicio';
+        style.innerHTML = `
+        .botones-final {
+            text-align: center;
+        }
+        .btn-volver-inicio, .btn-revancha {
+            display: inline-block;
+            margin: 2rem 1rem 0 1rem;
+            background: #3b82f6;
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            padding: 0.8rem 2.5rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(59,130,246,0.15);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .btn-volver-inicio:hover, .btn-revancha:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+        .btn-revancha {
+            background: #22c55e;
+        }
+        .btn-revancha:hover {
+            background: #16a34a;
+        }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+function revancha() {
+    let modal = document.getElementById('mensaje-ganador-final');
+    if (modal) modal.remove();
+    resetGame.reiniciarSerie = true;
+    resetGame();
+}
+
+function volverAlInicio() {
+    let modal = document.getElementById('mensaje-ganador-final');
+    if (modal) modal.remove();
+    // Mostrar el modal de selección de modo
+    document.getElementById('overlay').classList.remove('oculto');
+    document.body.classList.add('modal-abierto');
+}
+
+function actualizarMarcadorSerie() {
+    let marcador = document.getElementById('marcador-serie');
+    if (!marcador) {
+        marcador = document.createElement('div');
+        marcador.id = 'marcador-serie';
+        marcador.style.textAlign = 'center';
+        marcador.style.fontWeight = 'bold';
+        marcador.style.fontSize = '1.2rem';
+        marcador.style.margin = '1rem auto';
+        document.querySelector('main.container').insertBefore(marcador, document.querySelector('.game-section'));
+    }
+    marcador.innerHTML = `Marcador de la serie: <span style='color:#e11d48'>Impar</span> ${victoriasImpar} - ${victoriasPar} <span style='color:#0d6efd'>Par</span> <br> (Mejor de ${mejorDe})`;
+}
+
+// Refuerza el z-index del modal de ganador final en el CSS
+if (!document.getElementById('css-modal-ganador-final')) {
+    const style = document.createElement('style');
+    style.id = 'css-modal-ganador-final';
+    style.innerHTML = `
+    .mensaje-ganador-final {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        color: #fff;
+        font-size: 2.2rem;
+        font-weight: bold;
+        animation: fadeInScale 0.5s;
+    }
+    `;
+    document.head.appendChild(style);
 }

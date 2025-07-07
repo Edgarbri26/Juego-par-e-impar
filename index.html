@@ -1,101 +1,65 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" >
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
-    <link rel="stylesheet" href="src/css/game.css" >
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="src/css/game.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Par impar</title>
-  </head>
+    <style>
+        .mejor-de-selector {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        .mejor-de-label {
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        .mejor-de-select {
+            margin-left: 0.5rem;
+            padding: 0.3rem 1rem;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
 
   <body>
     <!-- Modal de selección de modo de juego (estilo moderno) -->
     <div id="overlay" class="overlay">
-      <div class="modal-modo-juego">
-        <h2 class="modal-title">Selecciona el modo de juego</h2>
-        <div class="modal-options">
-          <div class="option-card bg-green" onclick="seleccionarModo('cpu')">
-            <div class="option-icon">
-              <!-- CPU SVG -->
-              <svg
-                width="32"
-                height="32"
-                fill="none"
-                stroke="#22c55e"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                viewBox="0 0 24 24"
-              >
-                <rect x="4" y="4" width="16" height="16" rx="2" />
-                <path d="M9 9h6v6H9z" />
-                <path
-                  d="M9 1v2M15 1v2M9 21v2M15 21v2M1 9h2M1 15h2M21 9h2M21 15h2"
-                />
-              </svg>
+        <div class="modal-modo-juego">
+            <h2 class="modal-title">Selecciona el modo de juego</h2>
+            <div class="modal-options">
+                <div class="option-card bg-green" onclick="seleccionarModo('cpu')">
+                    <div class="option-icon">
+                        <i class="fa-solid fa-robot icono" id="icono-cpu"></i>
+                    </div>
+                    <div class="option-text">Contra la PC</div>
+                </div>
+                <div class="option-card bg-blue" onclick="seleccionarModo('pvp')">
+                    <div class="option-icon">
+                        <i class="fa-solid fa-user-group icono" id="icono-pvp"></i>
+                    </div>
+                    <div class="option-text">Jugador vs Jugador</div>
+                </div>
+                <div class="option-card bg-purple option-disabled">
+                    <div class="option-icon">
+                        <i class="fa-solid fa-globe icono" id="icono-online"></i>
+                    </div>
+                    <div class="option-text">Modo Online</div>
+                </div>
             </div>
-            <div class="option-text">Contra la PC</div>
-          </div>
-          <div class="option-card bg-blue" onclick="seleccionarModo('pvp')">
-            <div class="option-icon">
-              <!-- People SVG -->
-              <svg
-                width="32"
-                height="32"
-                fill="none"
-                stroke="#3b82f6"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                viewBox="0 0 24 24"
-              >
-                <circle cx="9" cy="7" r="4" />
-                <circle cx="17" cy="7" r="4" />
-                <path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2" />
-              </svg>
+            <div class="mejor-de-selector">
+                <label for="mejorDe" class="mejor-de-label">¿Mejor de cuántas partidas?</label>
+                <select id="mejorDe" class="mejor-de-select">
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="7">7</option>
+                </select>
             </div>
-            <div class="option-text">Jugador vs Jugador</div>
-          </div>
-          <div class="option-card bg-purple option-disabled">
-            <div class="option-icon">
-              <!-- Globe SVG -->
-              <svg
-                width="32"
-                height="32"
-                fill="none"
-                stroke="#a64bf4"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                viewBox="0 0 24 24"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <path
-                  d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"
-                />
-              </svg>
-            </div>
-            <div class="option-text">Modo Online</div>
-          </div>
         </div>
-      </div>
-    </div>
-
-    <div id="modalJugador">
-      <div class="modal-modo-juego">
-        <h2 class="modal-title">Ingresar Jugador</h2>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="nombreJugador" class="form-label"
-              >Nombre del Jugador:</label
-            >
-            <input type="text" class="form-control" id="nombreJugador">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <a href="index.html" class="btn btn-secondary">Cancelar</a>
-          <button type="button" onclick="ocultarModal()">Iniciar juego</button>
-        </div>
-      </div>
     </div>
 
     <main class="container">
@@ -152,16 +116,8 @@
           </div>
         </div>
 
-        <button
-          id="btn-reset"
-          type="button"
-          class="button"
-          onclick="resetGame()"
-        >
-          reiniciar
-        </button>
-        <div id="resultado"></div>
-      </section>
+            <div id="resultado"></div>
+        </section>
     </main>
     <script src="src/js/game.js"></script>
   </body>
