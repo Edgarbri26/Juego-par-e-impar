@@ -10,6 +10,57 @@ body{
     color: white;
 }
 
+#juegoContainer{
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-areas: "menulateral contenido";
+  height: 100vh;
+}
+
+#menu-lateral{
+  grid-area: "menulateral";
+  background-color: #F8F9FA;
+  height: 100vh !important;
+}
+#contenido{
+  grid-area: "contenido";
+}
+
+#modoModal{
+  max-width:600px;
+  width:100%;
+}
+
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  /*background: rgba(30, 30, 30, 0.7);*/
+  background: #F8F9FA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#pvp:hover{
+  cursor: pointer;
+}
+#cpu:hover{
+  cursor: pointer;
+}
+#online:hover{
+  cursor: pointer;
+}
+
+.card:hover{
+  filter: brightness(85%);
+}
+
+
 #player{
     position: relative;
     font-size: 40px;
@@ -36,7 +87,7 @@ body{
 #board{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    gap: 10px !important;
     margin: 20px auto;
     width: 300px;
     height: 300px;
@@ -48,7 +99,7 @@ body{
     margin: auto;
     background: white; /* El color de las líneas divisorias */
     padding: 0;
-    border-radius: 13px;
+    border-radius: 13px !important;
 }
 
 .cell{
