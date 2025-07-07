@@ -7,7 +7,7 @@ $result = mysqli_query($conexion, $sql);
 $ranking = array();
 if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
-        $roles[] = $row;
+        $ranking[] = $row;
     }
 }
 

@@ -1,8 +1,8 @@
 <?php
-  $DATABASE_HOST = 'localhost';
-  $DATABASE_USER = 'root';
-  $DATABASE_PASS = '12345';
-  $DATABASE_NAME = 'juegoparimpar';
+  $DATABASE_HOST = 'bjhfosqcyrygcuze7pil-mysql.services.clever-cloud.com';
+  $DATABASE_USER = 'u0c6tqlkz9o2nh8z';
+  $DATABASE_PASS = 'JloGvFtiOJnsY92YeeEq';
+  $DATABASE_NAME = 'bjhfosqcyrygcuze7pil';
 
   // conexion a la base de datos
   $conexion = mysqli_connect($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
