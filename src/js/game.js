@@ -155,8 +155,7 @@ function validarGanador() {
             (celdas[a] + celdas[b] + celdas[c] === 15)
         ) {
             const winner = playerTurn ? "Impar" : "Par";
-            const mensaje = document.getElementById("resultado");
-            mensaje.innerHTML = `<h2>El jugador ${winner} ha ganado la partida!</h2>`;
+            mostrarModalGanador(winner);
             hayGanador = true;
             const Cambiartexto = document.getElementById('btn-reset');
             Cambiartexto.innerText =`Volver a jugar`;
@@ -169,13 +168,90 @@ function validarGanador() {
 
     // Si no hay ganador y todas las celdas tienen valor, es empate
     if (!hayGanador && celdas.slice(1).every(val => val !== null)) {
-        const mensaje = document.getElementById("resultado");
-        mensaje.innerHTML = `<h2>¡La partida ha terminado en empate!</h2>`;
+        mostrarModalGanador("Empate");
         const Cambiartexto = document.getElementById('btn-reset');
         Cambiartexto.innerText =`Volver a jugar`;
     }
 }
 
+function mostrarModalGanador(ganador) {
+    // Elimina cualquier modal anterior
+    let modalExistente = document.getElementById('mensaje-ganador');
+    if (modalExistente) modalExistente.remove();
+    // Crea el modal
+    const modal = document.createElement('div');
+    modal.id = 'mensaje-ganador';
+    modal.className = 'mensaje-ganador ' + (ganador === 'Par' ? 'par' : ganador === 'Impar' ? 'impar' : 'empate');
+    let mensaje = '';
+    if (ganador === 'Empate') {
+        mensaje = '🤝 ¡La partida ha terminado en empate!';
+    } else if (ganador === 'Par') {
+        mensaje = '🎉 ¡El jugador Par ha ganado la partida! 🎉';
+    } else {
+        mensaje = '🎉 ¡El jugador Impar ha ganado la partida! 🎉';
+    }
+    modal.innerHTML = `<h2>${mensaje}</h2><button onclick="ocultarModalGanador(); resetGame();">Volver a jugar</button>`;
+    document.body.appendChild(modal);
+}
+
+function ocultarModalGanador() {
+    let modal = document.getElementById('mensaje-ganador');
+    if (modal) modal.remove();
+}
+
+// Modifica resetGame para ocultar el modal si existe
+const originalResetGame = resetGame;
+resetGame = function() {
+    ocultarModalGanador();
+    originalResetGame();
+}
+
+// Agrega el CSS para el modal de ganador si no existe
+(function(){
+    if (!document.getElementById('css-mensaje-ganador')) {
+        const style = document.createElement('style');
+        style.id = 'css-mensaje-ganador';
+        style.innerHTML = `
+        .mensaje-ganador {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            color: #fff;
+            font-size: 2.2rem;
+            font-weight: bold;
+            animation: fadeInScale 0.5s;
+        }
+        .mensaje-ganador.impar h2 { color: #e11d48; }
+        .mensaje-ganador.par h2 { color: #2563eb; }
+        .mensaje-ganador.empate h2 { color: #fbbf24; }
+        .mensaje-ganador button {
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            padding: 0.7rem 2rem;
+            border-radius: 8px;
+            border: none;
+            background: #fff;
+            color: #222;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .mensaje-ganador button:hover {
+            background: #f3f4f6;
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.8);}
+            to { opacity: 1; transform: scale(1);}
+        }
+        `;
+        document.head.appendChild(style);
+    }
+})();
 
 function jugadorEfectoHover() {
     const celdas = document.querySelectorAll('.cell');
