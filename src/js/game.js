@@ -109,6 +109,10 @@ function resetGame() {
         cell.classList.remove("impar"); // Limpiar la clase de celda impar
         cell.classList.remove("par"); // Limpiar la clase de celda par
     });
+
+    // Ocultar la línea ganadora
+    const linea = document.getElementById('linea-ganadora');
+    if (linea) linea.innerHTML = '';
 }
 
 
@@ -155,6 +159,7 @@ function validarGanador() {
             (celdas[a] + celdas[b] + celdas[c] === 15)
         ) {
             const winner = playerTurn ? "Impar" : "Par";
+            dibujarLineaGanadora(combo, winner);
             mostrarModalGanador(winner);
             hayGanador = true;
             const Cambiartexto = document.getElementById('btn-reset');
@@ -202,6 +207,9 @@ function ocultarModalGanador() {
 // Modifica resetGame para ocultar el modal si existe
 const originalResetGame = resetGame;
 resetGame = function() {
+    // Ocultar la línea ganadora
+    const linea = document.getElementById('linea-ganadora');
+    if (linea) linea.innerHTML = '';
     ocultarModalGanador();
     originalResetGame();
 }
@@ -260,21 +268,16 @@ function jugadorEfectoHover() {
         cell.classList.remove('hover-impar', 'hover-par');
     });
 
-    if (playerTurn) {
-        // Jugador Impar
-        celdas.forEach(cell => {
-            if (!cell.classList.contains('impar') && !cell.classList.contains('par')) {
-                cell.classList.add('hover-impar');
+    // Aplica hover solo a celdas vacías (sin número)
+    labels.forEach((label, idx) => {
+        if (!label.textContent) {
+            if (playerTurn) {
+                celdas[idx].classList.add('hover-impar');
+            } else {
+                celdas[idx].classList.add('hover-par');
             }
-        });
-    } else {
-        // Jugador Par
-        celdas.forEach(cell => {
-            if (!cell.classList.contains('impar') && !cell.classList.contains('par')) {
-                cell.classList.add('hover-par');
-            }
-        });
-    }
+        }
+    });
 }
 
 function seleccionarModo(modo) {
@@ -301,4 +304,54 @@ function turnoPC() {
         select.value = numElegido;
         select.dispatchEvent(new Event('change'));
     }
+}
+
+function dibujarLineaGanadora(combo, ganador) {
+    const linea = document.getElementById('linea-ganadora');
+    if (!linea) return;
+    linea.innerHTML = '';
+    let color = ganador === 'Impar' ? '#0d6efd' : '#198754'; // Bootstrap primary o success
+    let style = "position:absolute; z-index:3000; opacity:0.85; background:" + color + ";";
+    let claseAnim = '';
+    switch (combo.toString()) {
+        case '1,2,3': // Fila superior
+            style += ' top:16.5%; left:0; width:0; height:8px;';
+            claseAnim = 'linea-animada-horizontal';
+            break;
+        case '4,5,6': // Fila central
+            style += ' top:50%; left:0; width:0; height:8px; transform:translateY(-50%);';
+            claseAnim = 'linea-animada-horizontal';
+            break;
+        case '7,8,9': // Fila inferior
+            style += ' bottom:16.5%; left:0; width:0; height:8px;';
+            claseAnim = 'linea-animada-horizontal';
+            break;
+        case '1,4,7': // Columna izquierda
+            style += ' left:16.5%; top:0; width:8px; height:0;';
+            claseAnim = 'linea-animada-vertical';
+            break;
+        case '2,5,8': // Columna central
+            style += ' left:50%; top:0; width:8px; height:0; transform:translateX(-50%);';
+            claseAnim = 'linea-animada-vertical';
+            break;
+        case '3,6,9': // Columna derecha
+            style += ' right:16.5%; top:0; width:8px; height:0;';
+            claseAnim = 'linea-animada-vertical';
+            break;
+        case '1,5,9': // Diagonal principal
+            style += ' left:0; top:0; width:0; height:8px; transform:translateY(-50%) rotate(45deg);';
+            claseAnim = 'linea-animada-diagonal';
+            break;
+        case '3,5,7': // Diagonal secundaria
+            style += ' left:0; bottom:0; width:0; height:8px; transform:translateY(50%) rotate(-45deg);';
+            claseAnim = 'linea-animada-diagonal';
+            break;
+        default:
+            return;
+    }
+    linea.innerHTML = `<div class='${claseAnim}' style="${style}; transform-origin: left center;"></div>`;
+    setTimeout(() => {
+        const animada = linea.querySelector('div');
+        if (animada) animada.classList.add('mostrar');
+    }, 10);
 }
