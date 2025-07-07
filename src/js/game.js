@@ -7,9 +7,10 @@ let arrayImpar = [];
 let arrayPar = [];
 let modoJuego = null; // "pvp" o "cpu"
 
-    resetGame(); // Inicializar el juego
+    // (Eliminado: resetGame() fuera de lugar)
 
     window.addEventListener('DOMContentLoaded', () => {
+        resetGame(); // Inicializar el juego SOLO cuando el DOM esté listo
         document.getElementById('overlay').classList.remove('oculto'); // Mostrar modal al inicio
         document.body.classList.add('modal-abierto'); // Bloquear scroll de fondo
         jugadorEfectoHover();
@@ -20,6 +21,7 @@ let modoJuego = null; // "pvp" o "cpu"
             localStorage.removeItem('reloadCount');
             window.location.href = "inicio.html";
         }
+        actualizarJugadorHeader();
     });
 
 contents.forEach((content, index) => {
@@ -39,22 +41,25 @@ contents.forEach((content, index) => {
             let cell = event.target.parentElement;
             cell.classList.add("par");
         }
+        // Deshabilitar completamente la celda
+        let label = labels[index];
+        label.removeEventListener("click", showSelect);
+        label.style.pointerEvents = "none";
+        event.target.classList.remove("show"); // Ocultar el select
+        event.target.disabled = true;
         
         validarGanador();
         
         playerTurn = !playerTurn; // Cambiar turno
-        jugadorEfectoHover()
+        jugadorEfectoHover();
         updateCells();
-        
-        event.target.classList.remove("show"); // ocultAR el select
+        actualizarJugadorHeader();
         
         playerTurn? player.textContent = "Jugador Impar" : player.textContent = "Jugador Par";
         const mensaje = document.getElementById('resultado');
         if (!mensaje.innerHTML == "") {
             player.innerText = `El Juego a Terminado`
         }
-        label = labels[index];
-        label.removeEventListener("click", showSelect); // Elimina el evento click para evitar múltiples activaciones
         // --- Si es modo CPU y es turno de la PC, que juegue ---
         setTimeout(() => {
             if (modoJuego === "cpu" && !playerTurn && mensaje.innerHTML === "") {
@@ -113,6 +118,7 @@ function resetGame() {
     // Ocultar la línea ganadora
     const linea = document.getElementById('linea-ganadora');
     if (linea) linea.innerHTML = '';
+    actualizarJugadorHeader();
 }
 
 
@@ -195,7 +201,7 @@ function mostrarModalGanador(ganador) {
     } else {
         mensaje = '🎉 ¡El jugador Impar ha ganado la partida! 🎉';
     }
-    modal.innerHTML = `<h2>${mensaje}</h2><button onclick="ocultarModalGanador(); resetGame();">Volver a jugar</button>`;
+    modal.innerHTML = `<h2>${mensaje}</h2>`;
     document.body.appendChild(modal);
 }
 
@@ -310,7 +316,8 @@ function dibujarLineaGanadora(combo, ganador) {
     const linea = document.getElementById('linea-ganadora');
     if (!linea) return;
     linea.innerHTML = '';
-    let color = ganador === 'Impar' ? '#0d6efd' : '#198754'; // Bootstrap primary o success
+    // Determinar el color según el ganador
+    let color = ganador === 'Par' ? '#0d6efd' : '#e11d48'; // Azul para par, rojo para impar
     let style = "position:absolute; z-index:3000; opacity:0.85; background:" + color + ";";
     let claseAnim = '';
     switch (combo.toString()) {
@@ -354,4 +361,15 @@ function dibujarLineaGanadora(combo, ganador) {
         const animada = linea.querySelector('div');
         if (animada) animada.classList.add('mostrar');
     }, 10);
+}
+
+function actualizarJugadorHeader() {
+    const jugadorSpan = document.getElementById('jugador-impar');
+    if (playerTurn) {
+        jugadorSpan.textContent = 'Impar';
+        jugadorSpan.style.color = '#e11d48';
+    } else {
+        jugadorSpan.textContent = 'Par';
+        jugadorSpan.style.color = '#0d6efd';
+    }
 }

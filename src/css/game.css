@@ -374,6 +374,7 @@ body.modal-abierto {
 .linea-animada {
   transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1), width 0.5s cubic-bezier(0.4, 0.2, 0.2, 1), height 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
   transform-origin: left center;
+  border-radius: 2rem;
   transform: scaleX(0);
 }
 
