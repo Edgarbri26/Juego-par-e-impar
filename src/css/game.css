@@ -10,6 +10,7 @@ body{
     color: white;
 }
 
+
 #juegoContainer{
   display: grid;
   grid-template-columns: 200px 1fr;
@@ -45,6 +46,73 @@ body{
   align-items: center;
   justify-content: center;
 }
+#modalJugador {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  /*background: rgba(30, 30, 30, 0.7);*/
+  background: #F8F9FA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#modalJugador input {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    text-align: center;
+    color: #212529;
+    background-color: #fff;
+    border: 1px solid #ced4da; /* Borde sutil para el input */
+    border-radius: 8px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    position: relative;
+    margin-bottom: 30px;
+    right: 12px;
+}
+
+/* Estilo para cuando el usuario hace clic en el campo (estado :focus) */
+#modalJugador input:focus {
+    border-color: #86b7fe; /* Cambia el color del borde a azul */
+    outline: 0; /* Quita el borde por defecto del navegador */
+    /* Añade una sombra suave para resaltar que está activo */
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); 
+}
+
+ #modalJugador a{
+  color: #212121;
+    display: inline-block; /* Permite que se comporten como bloques pero en línea */
+    padding: 10px 20px;    /* Espaciado interno (vertical y horizontal) */
+    font-size: 16px;       /* Tamaño de la fuente */
+    font-weight: 600;      /* Grosor de la fuente (semi-negrita) */
+    text-align: center;    /* Centra el texto del botón */
+    text-decoration: none; /* Quita el subrayado si usas etiquetas <a> */
+    cursor: pointer;       /* Muestra una mano al pasar el ratón */
+    border: none;          /* Sin borde por defecto */
+    border-radius: 8px;    /* Bordes redondeados */
+   background-color: gray;
+}
+ #modalJugador button{
+  color: #212121;
+    display: inline-block; /* Permite que se comporten como bloques pero en línea */
+    padding: 10px 20px;    /* Espaciado interno (vertical y horizontal) */
+    font-size: 16px;       /* Tamaño de la fuente */
+    font-weight: 600;      /* Grosor de la fuente (semi-negrita) */
+    text-align: center;    /* Centra el texto del botón */
+    text-decoration: none; /* Quita el subrayado si usas etiquetas <a> */
+    cursor: pointer;       /* Muestra una mano al pasar el ratón */
+    border: none;          /* Sin borde por defecto */
+    border-radius: 8px;    /* Bordes redondeados */
+   background-color: gray;
+}
+
+
+
 
 #pvp:hover{
   cursor: pointer;
@@ -214,6 +282,9 @@ body{
   display: flex;
 }
 #overlay.oculto {
+  display: none !important;
+}
+#modalJugador.oculto {
   display: none !important;
 }
 

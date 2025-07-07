@@ -292,6 +292,11 @@ function seleccionarModo(modo) {
     document.body.classList.remove('modal-abierto'); // Quitar clase para permitir scroll
     resetGame();
 }
+function ocultarModal() {
+    document.getElementById('modalJugador').classList.add('oculto'); // Ocultar modal
+    document.body.classList.remove('modal-abierto'); // Quitar clase para permitir scroll
+    resetGame();
+}
 window.seleccionarModo = seleccionarModo; // Para acceso desde HTML
 
 function turnoPC() {
