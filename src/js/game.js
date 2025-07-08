@@ -12,6 +12,9 @@ let victoriasPar = 0;
 let JugadoresValidados = [];
 let nombreJugadorPar = '';
 let nombreJugadorImpar = '';
+let esTurnoPC;
+// Variable para saber si la PC es par o impar
+let ladoPC = 'Par'; // Valor por defecto
 
     // window.addEventListener('DOMContentLoaded', () => {
     //     resetGame(); // Inicializar el juego SOLO cuando el DOM esté listo
@@ -117,6 +120,7 @@ function IngresarJugador(){
     if (modoJuego === 'cpu') {
         let nombreHumano = document.getElementById('nombreHumano').value;
         let lado = document.getElementById('selectLadoCPU').value;
+        ladoPC = (lado === 'Par') ? 'Impar' : 'Par'; // Si elige Par, la PC es Impar, y viceversa
         if (!nombreHumano) {
             document.getElementById('resultadoDelFormJugadores').innerHTML = '<div style="color: red;">Por favor, ingresa tu nombre.</div>';
             return;
@@ -208,7 +212,7 @@ contents.forEach((content, index) => {
             player.innerText = `El Juego ha Terminado`;
         }
 
-        if (modoJuego === "cpu" && !playerTurn && mensaje.innerHTML === "") {
+        if (modoJuego === "cpu" && ((ladoPC === 'Par' && !playerTurn) ||(ladoPC === 'Impar' && playerTurn)) && mensaje.innerHTML === "") {
             setTimeout(() => {
                 turnoPC();
             }, 500);
@@ -486,12 +490,21 @@ function ocultarModal() {
     document.getElementById('modalJugador').classList.add('oculto'); // Ocultar modal
     document.body.classList.remove('modal-abierto'); // Quitar clase para permitir scroll
     resetGame();
+    // Si la PC debe empezar (ladoPC === 'Impar' y es su turno)
+    esTurnoPC = (ladoPC === 'Par' && !playerTurn) || (ladoPC === 'Impar' && playerTurn);
+    if (esTurnoPC) {
+        setTimeout(() => {
+            turnoPC();
+        }, 500);
+    }
 }
 window.seleccionarModo = seleccionarModo; // Para acceso desde HTML
 
 function turnoPC() {
-    // La PC es el jugador PAR
-    if (!playerTurn && modoJuego === "cpu") {
+    // La PC puede ser el jugador PAR o IMPAR
+    if (modoJuego === "cpu") {
+        // let esTurnoPC = (ladoPC === 'Par' && !playerTurn) || (ladoPC === 'Impar' && playerTurn);
+        if (!esTurnoPC) return;
         // Verificar si la serie ya tiene ganador
         let necesario = Math.floor(mejorDe / 2) + 1;
         if (victoriasImpar >= necesario || victoriasPar >= necesario) {
@@ -808,62 +821,62 @@ function verificarGanadorSerie() {
     }
 }
 
-function mostrarModalGanadorFinal(ganador) {
-    let modalExistente = document.getElementById('mensaje-ganador-final');
-    if (modalExistente) modalExistente.remove();
-    const modal = document.createElement('div');
-    modal.id = 'mensaje-ganador-final';
-    modal.className = 'mensaje-ganador-final ' + (ganador === 'Par' ? 'par' : 'impar');
-    const idioma = getIdiomaActual();
-    let mensaje = '';
-    if (ganador === 'Par') {
-        mensaje = traduccionesJuego[idioma].ganadorSeriePar;
-    } else {
-        mensaje = traduccionesJuego[idioma].ganadorSerieImpar;
-    }
-    modal.innerHTML = `<h2>${mensaje}</h2>
-        <div class="botones-final">
-            <button class='btn-volver-inicio' onclick="volverAlInicio()">${traduccionesJuego[idioma].btnVolver}</button>
-            <button class='btn-revancha' onclick="revancha()">${traduccionesJuego[idioma].btnRevancha}</button>
-        </div>`;
-    document.body.appendChild(modal);
-    // Refuerza el CSS de los botones si no existe
-    if (!document.getElementById('css-btn-volver-inicio')) {
-        const style = document.createElement('style');
-        style.id = 'css-btn-volver-inicio';
-        style.innerHTML = `
-        .botones-final {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-        .btn-volver-inicio, .btn-revancha {
-            display: inline-block;
-            margin: 0 1rem;
-            background: #3b82f6;
-            color: #fff;
-            font-size: 1.3rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 10px;
-            padding: 0.8rem 2.5rem;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(59,130,246,0.15);
-            transition: background 0.2s, transform 0.2s;
-        }
-        .btn-volver-inicio:hover, .btn-revancha:hover {
-            background: #2563eb;
-            transform: scale(1.05);
-        }
-        .btn-revancha {
-            background: #22c55e;
-        }
-        .btn-revancha:hover {
-            background: #16a34a;
-        }
-        `;
-        document.head.appendChild(style);
-    }
-}
+// function mostrarModalGanadorFinal(ganador) {
+//     let modalExistente = document.getElementById('mensaje-ganador-final');
+//     if (modalExistente) modalExistente.remove();
+//     const modal = document.createElement('div');
+//     modal.id = 'mensaje-ganador-final';
+//     modal.className = 'mensaje-ganador-final ' + (ganador === 'Par' ? 'par' : 'impar');
+//     const idioma = getIdiomaActual();
+//     let mensaje = '';
+//     if (ganador === 'Par') {
+//         mensaje = traduccionesJuego[idioma].ganadorSeriePar;
+//     } else {
+//         mensaje = traduccionesJuego[idioma].ganadorSerieImpar;
+//     }
+//     modal.innerHTML = `<h2>${mensaje}</h2>
+//         <div class="botones-final">
+//             <button class='btn-volver-inicio' onclick="volverAlInicio()">${traduccionesJuego[idioma].btnVolver}</button>
+//             <button class='btn-revancha' onclick="revancha()">${traduccionesJuego[idioma].btnRevancha}</button>
+//         </div>`;
+//     document.body.appendChild(modal);
+//     // Refuerza el CSS de los botones si no existe
+//     if (!document.getElementById('css-btn-volver-inicio')) {
+//         const style = document.createElement('style');
+//         style.id = 'css-btn-volver-inicio';
+//         style.innerHTML = `
+//         .botones-final {
+//             text-align: center;
+//             margin-top: 1.5rem;
+//         }
+//         .btn-volver-inicio, .btn-revancha {
+//             display: inline-block;
+//             margin: 0 1rem;
+//             background: #3b82f6;
+//             color: #fff;
+//             font-size: 1.3rem;
+//             font-weight: bold;
+//             border: none;
+//             border-radius: 10px;
+//             padding: 0.8rem 2.5rem;
+//             cursor: pointer;
+//             box-shadow: 0 2px 8px rgba(59,130,246,0.15);
+//             transition: background 0.2s, transform 0.2s;
+//         }
+//         .btn-volver-inicio:hover, .btn-revancha:hover {
+//             background: #2563eb;
+//             transform: scale(1.05);
+//         }
+//         .btn-revancha {
+//             background: #22c55e;
+//         }
+//         .btn-revancha:hover {
+//             background: #16a34a;
+//         }
+//         `;
+//         document.head.appendChild(style);
+//     }
+// }
 
 function revancha() {
     // Cerrar cualquier modal de ganador
