@@ -9,6 +9,7 @@ let modoJuego = null; // "pvp" o "cpu"
 let mejorDe = 1;
 let victoriasImpar = 0;
 let victoriasPar = 0;
+let JugadoresValidados = [];
 
     // window.addEventListener('DOMContentLoaded', () => {
     //     resetGame(); // Inicializar el juego SOLO cuando el DOM esté listo
@@ -24,6 +25,41 @@ let victoriasPar = 0;
     //     }
     //     actualizarJugadorHeader();
     // });
+
+   function IngresarJugador(){
+    let nombreJugadorPar = document.getElementById('nombrePar').value;
+    let nombreJugadorImpar = document.getElementById('nombreImpar').value;
+
+    if(nombreJugadorPar == '' || nombreJugadorImpar == ''){
+        const divResultado = document.getElementById('resultadoDelFormJugadores');
+      divResultado.innerHTML = '<div class="alert alert-danger" role="alert">Por favor, complete todos los campos.</div>';
+      return;
+    }
+
+    fetch('modulos/ingresarJugadores.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nombreJugadorPar: nombreJugadorPar,
+        nombreJugadorImpar: nombreJugadorImpar
+      })
+    })
+    .then(response => response.json())
+    .then(respuesta => {
+      if (respuesta.success) {
+        ocultarModal()
+        JugadoresValidados = respuesta.jugadores;
+        
+      } else {
+        alert('Error al ingresar jugadores');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+   }
 
 contents.forEach((content, index) => {
     updateCells(content); 

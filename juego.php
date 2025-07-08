@@ -54,22 +54,23 @@
 
   <div id="modalJugador">
     <div class="modal-modo-juego">
-      <h2 class="modal-title">Ingresar Jugador</h2>
+      <h2 class="modal-title">Ingresar Jugadores</h2>
       <div class="modal-body">
         <div class="mb-3">
-          <label for="nombreJugador" class="form-label">Nombre del Jugador 1:</label>
-          <input type="text" class="form-control" id="nombreJugador1">
+          <label for="nombrePar" class="form-label" style="font-size: 20px;">Nombre del Par:</label>
+          <input type="text" class="form-control" id="nombrePar">
         </div>
         <div class="mb-3">
-          <label for="nombreJugador" class="form-label">Nombre del Jugador 2:</label>
-          <input type="text" class="form-control" id="nombreJugador2">
+          <label for="nombreImpar" class="form-label" style="font-size: 20px;">Nombre del Impar:</label>
+          <input type="text" class="form-control" id="nombreImpar">
         </div>
       </div>
+      <div id="resultadoDelFormJugadores"></div>
       <div class="modal-footer" style="display: flex; flex-direction: row; justify-content: center; gap: 20px; ">
         <form action="juego.php">
           <button type="submit" class="btn btn-secondary">Cancelar</button>
         </form>
-        <button type="button" onclick="ocultarModal()">Iniciar juego</button>
+          <button type="button" onclick="IngresarJugador()">Iniciar juego</button>
       </div>
     </div>
   </div>

@@ -23,6 +23,7 @@ body{
   grid-area: "menulateral";
   background-color: #F8F9FA;
   height: 100vh !important;
+
 }
 #contenido{
   grid-area: "contenido";
