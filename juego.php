@@ -49,6 +49,9 @@
           <option value="7">7</option>
         </select>
       </div>
+      <button type="button" class="btn-volver-inicio-modal" onclick="window.location.href='index.php'">
+        Volver al home
+      </button>
     </div>
   </div>
 
