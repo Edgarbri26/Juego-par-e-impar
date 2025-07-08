@@ -10,6 +10,8 @@ let mejorDe = 1;
 let victoriasImpar = 0;
 let victoriasPar = 0;
 let JugadoresValidados = [];
+let nombreJugadorPar = '';
+let nombreJugadorImpar = '';
 
     // window.addEventListener('DOMContentLoaded', () => {
     //     resetGame(); // Inicializar el juego SOLO cuando el DOM esté listo
@@ -27,12 +29,12 @@ let JugadoresValidados = [];
     // });
 
    function IngresarJugador(){
-    let nombreJugadorPar = document.getElementById('nombrePar').value;
-    let nombreJugadorImpar = document.getElementById('nombreImpar').value;
+    let nombrePar = document.getElementById('nombrePar').value;
+    let nombreImpar = document.getElementById('nombreImpar').value;
 
-    if(nombreJugadorPar == '' || nombreJugadorImpar == ''){
+    if(nombrePar == '' || nombreImpar == ''){
         const divResultado = document.getElementById('resultadoDelFormJugadores');
-      divResultado.innerHTML = '<div class="alert alert-danger" role="alert">Por favor, complete todos los campos.</div>';
+      divResultado.innerHTML = '<div style="color: red;" role="alert">Por favor, complete todos los campos.</div>';
       return;
     }
 
@@ -42,15 +44,26 @@ let JugadoresValidados = [];
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        nombreJugadorPar: nombreJugadorPar,
-        nombreJugadorImpar: nombreJugadorImpar
+        nombreJugadorPar: nombrePar,
+        nombreJugadorImpar: nombreImpar
       })
     })
     .then(response => response.json())
     .then(respuesta => {
       if (respuesta.success) {
-        ocultarModal()
-        JugadoresValidados = respuesta.jugadores;
+        // Guardar los nombres de los jugadores globalmente
+        nombreJugadorPar = nombrePar;
+        nombreJugadorImpar = nombreImpar;
+        
+        // Actualizar las traducciones con los nombres reales
+        actualizarTraduccionesConNombres();
+        
+        // Ocultar modal y actualizar la interfaz
+        ocultarModal();
+        
+        // Actualizar el marcador y header del jugador
+        actualizarMarcadorSerie();
+        actualizarJugadorHeader();
         
       } else {
         alert('Error al ingresar jugadores');
@@ -91,10 +104,15 @@ contents.forEach((content, index) => {
         jugadorEfectoHover();
         updateCells();
         actualizarJugadorHeader();
-        playerTurn ? player.textContent = "Jugador Impar" : player.textContent = "Jugador Par";
+        // Usar nombres reales si están disponibles
+        if (nombreJugadorImpar && nombreJugadorPar) {
+            playerTurn ? player.textContent = nombreJugadorImpar : player.textContent = nombreJugadorPar;
+        } else {
+            playerTurn ? player.textContent = "Jugador Impar" : player.textContent = "Jugador Par";
+        }
         const mensaje = document.getElementById('resultado');
         if (!mensaje.innerHTML == "") {
-            player.innerText = `El Juego a Terminado`;
+            player.innerText = `El Juego ha Terminado`;
         }
 
         if (modoJuego === "cpu" && !playerTurn && mensaje.innerHTML === "") {
@@ -156,7 +174,12 @@ function resetGame() {
         if (contents[idx]) contents[idx].disabled = false;
     });
 
-    player.textContent = "Jugador Impar";
+    // Usar nombre real del jugador impar si está disponible
+    if (nombreJugadorImpar) {
+        player.textContent = nombreJugadorImpar;
+    } else {
+        player.textContent = "Jugador Impar";
+    }
 
     let contenCells = document.querySelectorAll('.cell');
     contenCells.forEach((cell) => {
@@ -462,6 +485,20 @@ function getIdiomaActual() {
     return localStorage.getItem('idioma') || 'es';
 }
 
+function actualizarTraduccionesConNombres() {
+    const idioma = getIdiomaActual();
+    
+    // Actualizar traducciones con nombres reales si están disponibles
+    if (nombreJugadorPar && nombreJugadorImpar) {
+        traduccionesJuego[idioma].jugadorImpar = nombreJugadorImpar;
+        traduccionesJuego[idioma].jugadorPar = nombreJugadorPar;
+        traduccionesJuego[idioma].ganadorImpar = `🎉 ¡${nombreJugadorImpar} ha ganado la partida! 🎉`;
+        traduccionesJuego[idioma].ganadorPar = `🎉 ¡${nombreJugadorPar} ha ganado la partida! 🎉`;
+        traduccionesJuego[idioma].ganadorSerieImpar = `🏆 ¡${nombreJugadorImpar} ha ganado la serie! 🏆`;
+        traduccionesJuego[idioma].ganadorSeriePar = `🏆 ¡${nombreJugadorPar} ha ganado la serie! 🏆`;
+    }
+}
+
 function actualizarMarcadorSerie() {
     let marcador = document.getElementById('marcador-serie');
     if (!marcador) {
@@ -474,7 +511,12 @@ function actualizarMarcadorSerie() {
         document.querySelector('main.container').insertBefore(marcador, document.querySelector('.game-section'));
     }
     const idioma = getIdiomaActual();
-    marcador.innerHTML = `${traduccionesJuego[idioma].marcador} <span style='color:#e11d48'>${traduccionesJuego[idioma].impar}</span> ${victoriasImpar} - ${victoriasPar} <span style='color:#0d6efd'>${traduccionesJuego[idioma].par}</span> <br> ${traduccionesJuego[idioma].mejorDe} ${mejorDe})`;
+    
+    // Usar nombres reales si están disponibles, sino usar los genéricos
+    const nombreImpar = nombreJugadorImpar || traduccionesJuego[idioma].impar;
+    const nombrePar = nombreJugadorPar || traduccionesJuego[idioma].par;
+    
+    marcador.innerHTML = `${traduccionesJuego[idioma].marcador} <span style='color:#e11d48'>${nombreImpar}</span> ${victoriasImpar} - ${victoriasPar} <span style='color:#0d6efd'>${nombrePar}</span> <br> ${traduccionesJuego[idioma].mejorDe} ${mejorDe})`;
 }
 
 function actualizarJugadorHeader() {
@@ -482,14 +524,19 @@ function actualizarJugadorHeader() {
     const playerHeader = document.getElementById('player');
     const idioma = getIdiomaActual();
     if (!jugadorSpan || !playerHeader) return;
+    
+    // Usar nombres reales si están disponibles, sino usar los genéricos
+    const nombreImpar = nombreJugadorImpar || traduccionesJuego[idioma].impar;
+    const nombrePar = nombreJugadorPar || traduccionesJuego[idioma].par;
+    
     if (playerTurn) {
-        jugadorSpan.textContent = traduccionesJuego[idioma].impar;
+        jugadorSpan.textContent = nombreImpar;
         jugadorSpan.style.color = '#e11d48';
-        playerHeader.textContent = `${traduccionesJuego[idioma].jugador} ${traduccionesJuego[idioma].impar}`;
+        playerHeader.textContent = nombreImpar;
     } else {
-        jugadorSpan.textContent = traduccionesJuego[idioma].par;
+        jugadorSpan.textContent = nombrePar;
         jugadorSpan.style.color = '#0d6efd';
-        playerHeader.textContent = `${traduccionesJuego[idioma].jugador} ${traduccionesJuego[idioma].par}`;
+        playerHeader.textContent = nombrePar;
     }
 }
 
@@ -497,9 +544,11 @@ function actualizarJugadorHeader() {
 if (typeof window !== 'undefined') {
     const idiomaSelect = document.getElementById('idioma-select');
     if (idiomaSelect) {
-        idiomaSelect.addEventListener('change', function() {
-            actualizarMarcadorSerie();
-            actualizarJugadorHeader();
+            idiomaSelect.addEventListener('change', function() {
+        // Actualizar traducciones con nombres reales
+        actualizarTraduccionesConNombres();
+        actualizarMarcadorSerie();
+        actualizarJugadorHeader();
             // Si hay modal de ganador de ronda abierto, actualizarlo
             const modalGanador = document.getElementById('mensaje-ganador');
             if (modalGanador) {
@@ -527,6 +576,8 @@ if (typeof window !== 'undefined') {
         });
     }
     window.addEventListener('DOMContentLoaded', () => {
+        // Actualizar traducciones con nombres reales si están disponibles
+        actualizarTraduccionesConNombres();
         actualizarMarcadorSerie();
         actualizarJugadorHeader();
     });

@@ -60,7 +60,7 @@
       <h2 class="modal-title">Ingresar Jugadores</h2>
       <div class="modal-body">
         <div class="mb-3">
-          <label for="nombrePar" class="form-label" style="font-size: 20px;">Nombre del Par:</label>
+          <label for="nombrePar" class="form-label" style="font-size: 20px;"; ">Nombre del Par:</label>
           <input type="text" class="form-control" id="nombrePar">
         </div>
         <div class="mb-3">
@@ -71,9 +71,9 @@
       <div id="resultadoDelFormJugadores"></div>
       <div class="modal-footer" style="display: flex; flex-direction: row; justify-content: center; gap: 20px; ">
         <form action="juego.php">
-          <button type="submit" class="btn btn-secondary">Cancelar</button>
+          <button style="color: white;" type="submit" class="btn btn-secondary">Cancelar</button>
         </form>
-          <button type="button" onclick="IngresarJugador()">Iniciar juego</button>
+          <button style="color: white;" type="button" onclick="IngresarJugador()">Iniciar juego</button>
       </div>
     </div>
   </div>
@@ -135,6 +135,7 @@
       <div id="resultado"></div>
     </section>
   </main>
+
   <script src="src/js/game.js"></script>
   <script>
     const traducciones = {
