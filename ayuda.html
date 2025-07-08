@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reglas del juego Par e Impar</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .titulo {
+            text-align: center;
+            font-weight: bold;
+            background: #007bff;
+            color: #fff;
+            padding: 12px 0;
+            font-size: 2em;
+            margin: 32px 0 28px 0;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+        }
+        .reglas-card {
+            background: #232526;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+            padding: 2.2em 2em 1.5em 2em;
+            max-width: 700px;
+            width: 100%;
+            margin-bottom: 32px;
+        }
+        .ejemplo {
+            text-align: center;
+            margin: 18px 0 0 0;
+        }
+        .tablero {
+            display: inline-block;
+            border-collapse: collapse;
+            margin: 8px 0 0 0;
+            background: #232526;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+        }
+        .tablero td {
+            border: 1.5px solid #007bff;
+            width: 38px;
+            height: 38px;
+            text-align: center;
+            font-size: 1.3em;
+            color: #e11d48;
+            background: #212121;
+        }
+        .orden {
+            margin: 8px 0 18px 0;
+            color: #bdbdbd;
+            font-size: 1em;
+        }
+        strong {
+            color: #e11d48;
+            font-size: 1.1em;
+        }
+        .btn-volver-inicio {
+            display: block;
+            margin: 32px auto 0 auto;
+            background: #007bff;
+            color: #fff;
+            font-size: 1.15em;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            padding: 0.8rem 2.5rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(59,130,246,0.15);
+            transition: background 0.2s, transform 0.2s;
+            text-decoration: none;
+        }
+        .btn-volver-inicio:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+        @media (max-width: 800px) {
+            .titulo, .reglas-card {
+                max-width: 98vw;
+                font-size: 1.1em;
+            }
+            .tablero td {
+                width: 28px;
+                height: 28px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="titulo">Reglas del juego Par e Impar</div>
+    <div class="reglas-card">
+        <p>
+            Se dibujan dos pares de líneas paralelas entrecruzadas para formar el clásico juego de tres en raya (o la vieja). Un jugador tiene a su disposición los números impares 1, 3, 5, 7 y 9; el otro, los pares 2, 4, 6 y 8. Como hay 5 números impares y 4 números pares, el jugador impar siempre empieza colocando uno de sus números en cualquiera de los nueve espacios. El jugador par coloca uno de sus números en cualquier espacio libre. Los jugadores se turnan para colocar sus números en cualquier espacio libre. Ningún número puede usarse más de una vez. El ganador es el jugador que primero coloque uno de sus números en cualquier fila, columna o diagonal (principal o secundaria) de modo que la suma de su número y los dos números que ya están en esa línea sea exactamente 15. No se gana a menos que haya tres números en la línea. Si nadie consigue una línea de 15, el juego es un empate. En el siguiente juego, el jugador que tuvo los números impares deberá tomar los números pares, para que no empiece siempre el mismo jugador. El procedimiento se demostrará mediante tres juegos.
+        </p>
+    </div>
+    <div class="ejemplo">
+        <strong>Primer juego:</strong><br>
+        <table class="tablero">
+            <tbody>
+                <tr><td>6</td><td>7</td><td>2</td></tr>
+                <tr><td>5</td><td>3</td><td>4</td></tr>
+                <tr><td>9</td><td>1</td><td>8</td></tr>
+            </tbody>
+        </table>
+        <div class="orden">
+            El orden del primer juego fue: 9, 6, 1, 8, 3, 4, 5, 2, 7. El jugador impar ganó el juego con la línea 6, 7, 2.
+        </div>
+        <strong>Segundo juego:</strong><br>
+        <table class="tablero">
+            <tbody>
+                <tr><td>4</td><td></td><td>9</td></tr>
+                <tr><td>8</td><td>5</td><td>2</td></tr>
+                <tr><td></td><td>7</td><td></td></tr>
+            </tbody>
+        </table>
+        <div class="orden">
+            La secuencia en el segundo juego fue: 5, 4, 7, 2, 9, 8. El jugador par ganó con la línea 8, 5, 2.
+        </div>
+        <strong>Tercer juego:</strong><br>
+        <table class="tablero">
+            <tbody>
+                <tr><td>6</td><td>9</td><td>1</td></tr>
+                <tr><td>3</td><td>7</td><td>8</td></tr>
+                <tr><td>5</td><td>2</td><td>4</td></tr>
+            </tbody>
+        </table>
+        <div class="orden">
+            En el tercer juego, que terminó en empate, el orden fue 7, 2, 9, 8, 3, 4, 1, 6, 5.
+        </div>
+    </div>
+    <a href="index.php" class="btn-volver-inicio">Volver al inicio</a>
+</body>
+</html>

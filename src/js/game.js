@@ -104,12 +104,7 @@ contents.forEach((content, index) => {
         jugadorEfectoHover();
         updateCells();
         actualizarJugadorHeader();
-        // Usar nombres reales si están disponibles
-        if (nombreJugadorImpar && nombreJugadorPar) {
-            playerTurn ? player.textContent = nombreJugadorImpar : player.textContent = nombreJugadorPar;
-        } else {
-            playerTurn ? player.textContent = "Jugador Impar" : player.textContent = "Jugador Par";
-        }
+        playerTurn ? player.textContent = "Jugador Impar" : player.textContent = "Jugador Par";
         const mensaje = document.getElementById('resultado');
         if (!mensaje.innerHTML == "") {
             player.innerText = `El Juego ha Terminado`;
@@ -188,6 +183,8 @@ function resetGame() {
     });
 
     actualizarJugadorHeader();
+    jugadorEfectoHover();
+    actualizarNumerosDisponibles();
     // Si es la primera partida de la serie, reiniciar los contadores
     if (typeof resetGame.reiniciarSerie === 'undefined' || resetGame.reiniciarSerie) {
         victoriasImpar = 0;
@@ -367,6 +364,7 @@ function seleccionarModo(modo) {
     resetGame.reiniciarSerie = true;
     resetGame();
 }
+
 function ocultarModal() {
     document.getElementById('modalJugador').classList.add('oculto'); // Ocultar modal
     document.body.classList.remove('modal-abierto'); // Quitar clase para permitir scroll
@@ -389,6 +387,7 @@ function turnoPC() {
         let numElegido = opciones[Math.floor(Math.random() * opciones.length)];
         select.value = numElegido;
         select.dispatchEvent(new Event('change'));
+        actualizarNumerosDisponibles();
     }
 }
 
@@ -461,6 +460,7 @@ const traduccionesJuego = {
         btnRevancha: 'Revancha',
         ganadorSerieImpar: '🏆 ¡El jugador Impar ha ganado la serie! 🏆',
         ganadorSeriePar: '🏆 ¡El jugador Par ha ganado la serie! 🏆',
+        numerosDisponibles: 'Números disponibles:'
     },
     en: {
         marcador: 'Series score:',
@@ -478,6 +478,7 @@ const traduccionesJuego = {
         btnRevancha: 'Rematch',
         ganadorSerieImpar: '🏆 Odd Player has won the series! 🏆',
         ganadorSeriePar: '🏆 Even Player has won the series! 🏆',
+        numerosDisponibles: 'Available numbers:'
     }
 };
 
@@ -540,15 +541,23 @@ function actualizarJugadorHeader() {
     }
 }
 
+function actualizarNumerosDisponibles() {
+    const contenedor = document.getElementById('numeros-disponibles');
+    let numeros = playerTurn ? arrayImpar : arrayPar;
+    // Filtra el string vacío si existe
+    numeros = numeros.filter(n => n !== "");
+    const idioma = getIdiomaActual();
+    const label = traduccionesJuego[idioma] && traduccionesJuego[idioma].numerosDisponibles ? traduccionesJuego[idioma].numerosDisponibles : 'Números disponibles:';
+    contenedor.textContent = label + ' ' + (numeros.length > 0 ? numeros.join(", ") : (idioma === 'en' ? 'None' : 'Ninguno'));
+}
+
 // --- Cambio de idioma dinámico ---
 if (typeof window !== 'undefined') {
     const idiomaSelect = document.getElementById('idioma-select');
     if (idiomaSelect) {
-            idiomaSelect.addEventListener('change', function() {
-        // Actualizar traducciones con nombres reales
-        actualizarTraduccionesConNombres();
-        actualizarMarcadorSerie();
-        actualizarJugadorHeader();
+        idiomaSelect.addEventListener('change', function() {
+            actualizarMarcadorSerie();
+            actualizarJugadorHeader();
             // Si hay modal de ganador de ronda abierto, actualizarlo
             const modalGanador = document.getElementById('mensaje-ganador');
             if (modalGanador) {

@@ -66,6 +66,11 @@
                                 Ranking
                             </button>
                          </form>
+                         <form action="ayuda.html">
+                             <button type="submit" id="btn-ayuda" class="bg-blue-400 hover:bg-primary text-white font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider">
+                                Reglas
+                            </button>
+                         </form>
                      </div>
                 </article>
             </div>
