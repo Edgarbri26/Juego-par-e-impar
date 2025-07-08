@@ -10,20 +10,20 @@ let mejorDe = 1;
 let victoriasImpar = 0;
 let victoriasPar = 0;
 
-    window.addEventListener('DOMContentLoaded', () => {
-        resetGame(); // Inicializar el juego SOLO cuando el DOM esté listo
-        document.getElementById('overlay').classList.remove('oculto'); // Mostrar modal al inicio
-        document.body.classList.add('modal-abierto'); // Bloquear scroll de fondo
-        jugadorEfectoHover();
-        let reloadCount = parseInt(localStorage.getItem('reloadCount') || '0', 10);
-        reloadCount += 1;
-        localStorage.setItem('reloadCount', reloadCount);
-        if (reloadCount === 2) {
-            localStorage.removeItem('reloadCount');
-            window.location.href = "inicio.html";
-        }
-        actualizarJugadorHeader();
-    });
+    // window.addEventListener('DOMContentLoaded', () => {
+    //     resetGame(); // Inicializar el juego SOLO cuando el DOM esté listo
+    //     document.getElementById('overlay').classList.remove('oculto'); // Mostrar modal al inicio
+    //     document.body.classList.add('modal-abierto'); // Bloquear scroll de fondo
+    //     jugadorEfectoHover();
+    //     let reloadCount = parseInt(localStorage.getItem('reloadCount') || '0', 10);
+    //     reloadCount += 1;
+    //     localStorage.setItem('reloadCount', reloadCount);
+    //     if (reloadCount === 2) {
+    //         localStorage.removeItem('reloadCount');
+    //         window.location.href = "inicio.html";
+    //     }
+    //     actualizarJugadorHeader();
+    // });
 
 contents.forEach((content, index) => {
     updateCells(content); 

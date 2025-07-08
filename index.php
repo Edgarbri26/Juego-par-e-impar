@@ -55,12 +55,18 @@
                         tus contrincantes y conviértete en el maestro del par y el impar.
                         ¡No esperes más, la diversión te está llamando!
                      </p>
-                     <button type="button" id="btn-jugar" class="bg-blue-400 hover:bg-primary text-white font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider" onclick="redirigirAlJuego()">
-                        JUGAR
-                    </button>
-                     <button type="button" id="btn-Ranking" class="bg-blue-400 hover:bg-primary text-white font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider" onclick="redirigirAlRanking()">
-                        Ranking
-                    </button>
+                     <div class="botones-container" style="display: flex; flex-direction: row; justify-content: center; gap: 20px;">
+                         <form action="juego.php">
+                             <button type="submit" id="btn-jugar" class="bg-blue-400 hover:bg-primary text-white font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider">
+                                JUGAR
+                            </button>
+                         </form>
+                         <form action="ranking.php"> 
+                             <button type="submit" id="btn-Ranking" class="bg-blue-400 hover:bg-primary text-white font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider">
+                                Ranking
+                            </button>
+                         </form>
+                     </div>
                 </article>
             </div>
         </main>
@@ -98,7 +104,7 @@
             });
 
             function redirigirAlJuego() {
-                window.location.href = "index.html";
+                window.location.href = "juego.php";
             }
             function redirigirAlRanking() {
                 window.location.href = "modulos/Listaranking.php";
