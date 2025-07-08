@@ -157,7 +157,6 @@ body.modal-abierto {
 
 .game-section{
     width: 100vw;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -168,14 +167,9 @@ body.modal-abierto {
     grid-template-columns: repeat(3, 1fr);
     gap: 10px !important;
     margin: 20px auto;
-    width: 300px;
-    height: 300px;
-    right: 0;
-    left: 0;
-    top: 60px;
-    bottom: 0;
-    position: absolute;
-    margin: auto;
+    width: 100%;
+    max-width: 350px;
+    aspect-ratio: 1/1;
     background: white; /* El color de las líneas divisorias */
     padding: 0;
     border-radius: 13px !important;
@@ -503,4 +497,346 @@ body.modal-abierto {
 
 #icono-online{
   color:red
+}
+
+.btn-siguiente-ronda {
+  display: block;
+  margin: 2rem auto 0 auto;
+  background: #22c55e;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem 2.5rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(34,197,94,0.15);
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-siguiente-ronda:hover {
+  background: #16a34a;
+  transform: scale(1.05);
+}
+
+/* Estilos para los botones del modal de ganador */
+.btn-revancha, .btn-volver {
+  display: inline-block;
+  margin: 0 1rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem 2.5rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  color: #fff;
+}
+
+.btn-revancha {
+  background: #22c55e;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.15);
+}
+
+.btn-revancha:hover {
+  background: #16a34a;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+}
+
+.btn-volver {
+  background: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+}
+
+.btn-volver:hover {
+  background: #2563eb;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+/* Estilos para el modal de ganador */
+.mensaje-ganador {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  z-index: 4000;
+  max-width: 90vw;
+  width: 400px;
+}
+
+.mensaje-ganador h2 {
+  margin: 0 0 2rem 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.mensaje-ganador.par h2 {
+  color: #0d6efd;
+}
+
+.mensaje-ganador.impar h2 {
+  color: #e11d48;
+}
+
+.mensaje-ganador.empate h2 {
+  color: #6b7280;
+}
+
+/* Responsive para móviles */
+@media (max-width: 600px) {
+  .mensaje-ganador {
+    padding: 2rem 1.5rem;
+    width: 90vw;
+  }
+  
+  .mensaje-ganador h2 {
+    font-size: 1.3rem;
+  }
+  
+  .btn-revancha, .btn-volver {
+    display: block;
+    margin: 0.5rem auto;
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+/* --- NUEVO ESTILO MEJORADO PARA LOS BOTONES DE LA MODAL --- */
+.botones-modal {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.botones-modal button,
+.botones-modal .btn-revancha,
+.botones-modal .btn-volver,
+.botones-modal .btn-siguiente-ronda {
+  width: 180px;
+  min-width: 120px;
+  font-size: 1.13rem;
+  font-weight: 700;
+  padding: 0.85rem 0.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.10), 0 1.5px 4px rgba(0,0,0,0.08);
+  transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+  outline: none;
+  border: none;
+  letter-spacing: 0.5px;
+  margin: 0;
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.botones-modal .btn-revancha {
+  background: linear-gradient(90deg, #22c55e 80%, #16a34a 100%);
+  color: #fff;
+}
+.botones-modal .btn-revancha:hover, .botones-modal .btn-revancha:focus {
+  background: linear-gradient(90deg, #16a34a 80%, #22c55e 100%);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 24px rgba(34,197,94,0.18);
+}
+
+.botones-modal .btn-volver {
+  background: linear-gradient(90deg, #3b82f6 80%, #2563eb 100%);
+  color: #fff;
+}
+.botones-modal .btn-volver:hover, .botones-modal .btn-volver:focus {
+  background: linear-gradient(90deg, #2563eb 80%, #3b82f6 100%);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 24px rgba(59,130,246,0.18);
+}
+
+.botones-modal .btn-siguiente-ronda {
+  background: linear-gradient(90deg, #22c55e 80%, #16a34a 100%);
+  color: #fff;
+}
+.botones-modal .btn-siguiente-ronda:hover, .botones-modal .btn-siguiente-ronda:focus {
+  background: linear-gradient(90deg, #16a34a 80%, #22c55e 100%);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 24px rgba(34,197,94,0.18);
+}
+
+.botones-modal button:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+@media (max-width: 600px) {
+  .botones-modal {
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .botones-modal button,
+  .botones-modal .btn-revancha,
+  .botones-modal .btn-volver,
+  .botones-modal .btn-siguiente-ronda {
+    width: 100%;
+    min-width: unset;
+    font-size: 1.05rem;
+    padding: 1rem 0.5rem;
+    height: auto;
+    white-space: normal;
+  }
+}
+.mejor-de-selector {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+.mejor-de-label {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+.mejor-de-select {
+  margin-left: 0.5rem;
+  padding: 0.3rem 1rem;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+.idioma-bar {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 2rem 0 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+}
+.idioma-select {
+  background: #f3f4f6;
+  color: #222;
+  border-radius: 8px;
+  padding: 0.4rem 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  outline: none;
+  transition: border 0.2s;
+}
+.idioma-select:focus {
+  border: 1.5px solid #2563eb;
+}
+
+body {
+  background: linear-gradient(135deg, #232526 0%, #414345 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+main.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  /* min-height: 100vh; */
+}
+
+.marcador-serie, #marcador-serie {
+  margin-top: 1.2rem;
+  margin-bottom: 0.2rem;
+  font-size: 1.15rem;
+  letter-spacing: 0.5px;
+  text-align: center;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.10);
+}
+
+.game-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 0.2rem;
+  margin-bottom: 0;
+}
+
+#player {
+  font-size: 2rem;
+  margin: 0.7rem 0 0.3rem 0;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+#resultado {
+  margin-top: 1.2rem;
+  font-size: 1.1rem;
+  min-height: 24px;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .marcador-serie, #marcador-serie {
+    font-size: 0.98rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.1rem;
+    padding: 0 0.5rem;
+  }
+  #player {
+    font-size: 1.1rem;
+    margin-top: 0.4rem;
+    margin-bottom: 0.2rem;
+    padding: 0 0.5rem;
+  }
+  .game-section {
+    padding: 0 0.5rem;
+  }
+  #resultado {
+    font-size: 0.98rem;
+    margin-top: 0.7rem;
+    padding: 0 0.5rem;
+  }
+  #board {
+    width: 95vw;
+    height: 95vw;
+    min-width: 0;
+    min-height: 0;
+    max-width: 99vw;
+    max-height: 99vw;
+  }
+}
+
+@media (max-width: 400px) {
+  .mensaje-ganador {
+    max-width: 97vw;
+    width: 97vw;
+    padding: 1.2rem 0.5rem;
+  }
+  .mensaje-ganador h2 {
+    font-size: 1.05rem;
+    word-break: break-word;
+  }
+  .botones-modal button,
+  .botones-modal .btn-revancha,
+  .botones-modal .btn-volver,
+  .botones-modal .btn-siguiente-ronda {
+    font-size: 0.98rem;
+    padding: 0.7rem 0.2rem;
+    border-radius: 12px;
+  }
 }
