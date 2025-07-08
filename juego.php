@@ -83,6 +83,7 @@
       <h2 class="player" id="player">
         Jugador <span id="jugador-impar">Impar</span>
       </h2>
+      <div id="numeros-disponibles" style="margin-bottom: 1rem; text-align: center;"></div>
       <div id="board">
         <div id="linea-ganadora" class="linea-ganadora"></div>
 
