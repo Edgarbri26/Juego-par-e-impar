@@ -28,43 +28,135 @@ let nombreJugadorImpar = '';
     //     actualizarJugadorHeader();
     // });
 
-   function IngresarJugador(){
-    let nombrePar = document.getElementById('nombrePar').value;
-    let nombreImpar = document.getElementById('nombreImpar').value;
-
-    if(nombrePar == '' || nombreImpar == ''){
-        const divResultado = document.getElementById('resultadoDelFormJugadores');
-      divResultado.innerHTML = '<div style="color: red;" role="alert">Por favor, complete todos los campos.</div>';
-      return;
+   // Traducciones para la modal de jugadores
+const traduccionesModalJugador = {
+    es: {
+        tituloCPU: 'Ingresar jugador',
+        tituloVS: 'Ingresar Jugadores',
+        labelNombre: 'Nombre del jugador:',
+        labelPar: 'Nombre del jugador Par:',
+        labelImpar: 'Nombre del jugador Impar:',
+        labelLado: '¿Con qué lado quieres jugar?',
+        par: 'Par',
+        impar: 'Impar',
+        errorNombre: 'Por favor, ingresa tu nombre.',
+        errorCampos: 'Por favor, complete todos los campos.'
+    },
+    en: {
+        tituloCPU: 'Enter player',
+        tituloVS: 'Enter Players',
+        labelNombre: 'Player name:',
+        labelPar: 'Even player name:',
+        labelImpar: 'Odd player name:',
+        labelLado: 'Which side do you want to play?',
+        par: 'Even',
+        impar: 'Odd',
+        errorNombre: 'Please enter your name.',
+        errorCampos: 'Please complete all fields.'
     }
+};
 
+function getIdiomaActualModal() {
+    const select = document.getElementById('idioma-select');
+    return select ? select.value : 'es';
+}
+
+function traducirModalJugador() {
+    const idioma = getIdiomaActualModal();
+    const t = traduccionesModalJugador[idioma];
+    const modal = document.getElementById('modalJugador');
+    if (!modal) return;
+    const titulo = modal.querySelector('.modal-title');
+    const labelNombre = document.querySelector('#divNombreHumano label');
+    const labelPar = document.getElementById('labelPar');
+    const labelImpar = document.getElementById('labelImpar');
+    const labelLado = document.querySelector('#divLadoCPU label');
+    const selectLado = document.getElementById('selectLadoCPU');
+    if (modoJuego === 'cpu') {
+        if (titulo) titulo.textContent = t.tituloCPU;
+        if (labelNombre) labelNombre.textContent = t.labelNombre;
+        if (labelLado) labelLado.textContent = t.labelLado;
+        if (selectLado) {
+            selectLado.options[0].textContent = t.impar;
+            selectLado.options[1].textContent = t.par;
+        }
+    } else {
+        if (titulo) titulo.textContent = t.tituloVS;
+        if (labelPar) labelPar.textContent = t.labelPar;
+        if (labelImpar) labelImpar.textContent = t.labelImpar;
+    }
+}
+
+// Llama a traducirModalJugador cada vez que se muestre la modal
+function mostrarModalJugador() {
+    const modal = document.getElementById('modalJugador');
+    const divNombreHumano = document.getElementById('divNombreHumano');
+    const divPar = document.getElementById('divPar');
+    const divImpar = document.getElementById('divImpar');
+    const divLadoCPU = document.getElementById('divLadoCPU');
+    // Limpiar error
+    const resultadoForm = document.getElementById('resultadoDelFormJugadores');
+    if (resultadoForm) resultadoForm.innerHTML = '';
+    if (modoJuego === 'cpu') {
+        if (divLadoCPU) divLadoCPU.style.display = 'block';
+        if (divNombreHumano) divNombreHumano.style.display = 'block';
+        if (divPar) divPar.style.display = 'none';
+        if (divImpar) divImpar.style.display = 'none';
+    } else {
+        if (divLadoCPU) divLadoCPU.style.display = 'none';
+        if (divNombreHumano) divNombreHumano.style.display = 'none';
+        if (divPar) divPar.style.display = 'block';
+        if (divImpar) divImpar.style.display = 'block';
+    }
+    traducirModalJugador();
+    modal.classList.remove('oculto');
+    document.body.classList.add('modal-abierto');
+}
+
+function IngresarJugador(){
+    if (modoJuego === 'cpu') {
+        let nombreHumano = document.getElementById('nombreHumano').value;
+        let lado = document.getElementById('selectLadoCPU').value;
+        if (!nombreHumano) {
+            document.getElementById('resultadoDelFormJugadores').innerHTML = '<div style="color: red;">Por favor, ingresa tu nombre.</div>';
+            return;
+        }
+        if (lado === 'Par') {
+            nombreJugadorPar = nombreHumano;
+            nombreJugadorImpar = 'Computadora';
+        } else {
+            nombreJugadorImpar = nombreHumano;
+            nombreJugadorPar = 'Computadora';
+        }
+    } else {
+        let nombrePar = document.getElementById('nombrePar').value;
+        let nombreImpar = document.getElementById('nombreImpar').value;
+        if(nombrePar == '' || nombreImpar == ''){
+            const divResultado = document.getElementById('resultadoDelFormJugadores');
+            divResultado.innerHTML = '<div style="color: red;" role="alert">Por favor, complete todos los campos.</div>';
+            return;
+        }
+        nombreJugadorPar = nombrePar;
+        nombreJugadorImpar = nombreImpar;
+    }
     fetch('modulos/ingresarJugadores.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        nombreJugadorPar: nombrePar,
-        nombreJugadorImpar: nombreImpar
+        nombreJugadorPar: nombreJugadorPar,
+        nombreJugadorImpar: nombreJugadorImpar
       })
     })
     .then(response => response.json())
     .then(respuesta => {
       if (respuesta.success) {
-        // Guardar los nombres de los jugadores globalmente
-        nombreJugadorPar = nombrePar;
-        nombreJugadorImpar = nombreImpar;
-        
-        // Actualizar las traducciones con los nombres reales
         actualizarTraduccionesConNombres();
-        
-        // Ocultar modal y actualizar la interfaz
         ocultarModal();
-        
-        // Actualizar el marcador y header del jugador
         actualizarMarcadorSerie();
         actualizarJugadorHeader();
-        
+        actualizarNumerosDisponibles();
       } else {
         alert('Error al ingresar jugadores');
       }
@@ -72,7 +164,7 @@ let nombreJugadorImpar = '';
     .catch(error => {
       console.error('Error:', error);
     });
-   }
+}
 
 contents.forEach((content, index) => {
     updateCells(content); 
@@ -104,14 +196,19 @@ contents.forEach((content, index) => {
         jugadorEfectoHover();
         updateCells();
         actualizarJugadorHeader();
-        playerTurn ? player.textContent = "Jugador Impar" : player.textContent = "Jugador Par";
+        actualizarNumerosDisponibles();
+        // Usar nombres reales si están disponibles
+        if (nombreJugadorImpar && nombreJugadorPar) {
+            playerTurn ? player.textContent = nombreJugadorImpar : player.textContent = nombreJugadorPar;
+        } else {
+            playerTurn ? player.textContent = "Jugador Impar" : player.textContent = "Jugador Par";
+        }
         const mensaje = document.getElementById('resultado');
         if (!mensaje.innerHTML == "") {
             player.innerText = `El Juego ha Terminado`;
         }
 
         if (modoJuego === "cpu" && !playerTurn && mensaje.innerHTML === "") {
-            console.log('Llamando a turnoPC()');
             setTimeout(() => {
                 turnoPC();
             }, 500);
@@ -248,7 +345,7 @@ function validarGanador() {
             mostrarModalGanador(winner);
             hayGanador = true;
             const Cambiartexto = document.getElementById('btn-reset');
-            Cambiartexto.innerText =`Volver a jugar`;
+            if (Cambiartexto) Cambiartexto.innerText =`Volver a jugar`;
 
             labels.forEach((label) => {
               label.removeEventListener("click", showSelect);
@@ -263,7 +360,7 @@ function validarGanador() {
         actualizarMarcadorSerie();
         mostrarModalGanador("Empate");
         const Cambiartexto = document.getElementById('btn-reset');
-        Cambiartexto.innerText =`Volver a jugar`;
+        if (Cambiartexto) Cambiartexto.innerText =`Volver a jugar`;
         // No sumar puntos en empate, pero verificar si hay ganador de la serie (por si mejor de 1)
         setTimeout(verificarGanadorSerie, 1200);
     }
@@ -359,10 +456,30 @@ function seleccionarModo(modo) {
     // Leer el valor del selector mejorDe
     const selectMejorDe = document.getElementById('mejorDe');
     mejorDe = parseInt(selectMejorDe.value, 10);
-    document.getElementById('overlay').classList.add('oculto'); // Ocultar modal
-    document.body.classList.remove('modal-abierto'); // Quitar clase para permitir scroll
+    
+    // Borrar los nombres de los jugadores al seleccionar nuevo modo
+    nombreJugadorPar = '';
+    nombreJugadorImpar = '';
+    
+    // Limpiar los campos del formulario de nombres
+    limpiarFormularioNombres();
+    // Limpiar inputs del modal de jugadores
+    const inputHumano = document.getElementById('nombreHumano');
+    const inputPar = document.getElementById('nombrePar');
+    const inputImpar = document.getElementById('nombreImpar');
+    if (inputHumano) inputHumano.value = '';
+    if (inputPar) inputPar.value = '';
+    if (inputImpar) inputImpar.value = '';
+    // Restaurar las traducciones originales
+    restaurarTraduccionesOriginales();
+    // Ocultar modal de selección de modo
+    document.getElementById('overlay').classList.add('oculto');
+    document.body.classList.remove('modal-abierto');
+    // Reiniciar el juego
     resetGame.reiniciarSerie = true;
     resetGame();
+    // Mostrar modal de nombres de jugadores según el modo
+    mostrarModalJugador();
 }
 
 function ocultarModal() {
@@ -375,6 +492,11 @@ window.seleccionarModo = seleccionarModo; // Para acceso desde HTML
 function turnoPC() {
     // La PC es el jugador PAR
     if (!playerTurn && modoJuego === "cpu") {
+        // Verificar si la serie ya tiene ganador
+        let necesario = Math.floor(mejorDe / 2) + 1;
+        if (victoriasImpar >= necesario || victoriasPar >= necesario) {
+            return; // Ya hay ganador de la serie, la computadora no juega
+        }
         let celdasDisponibles = [];
         labels.forEach((label, idx) => {
             if (!label.textContent) celdasDisponibles.push(idx);
@@ -500,6 +622,77 @@ function actualizarTraduccionesConNombres() {
     }
 }
 
+function restaurarTraduccionesOriginales() {
+    const idioma = getIdiomaActual();
+    
+    // Restaurar las traducciones originales sin nombres específicos
+    if (idioma === 'es') {
+        traduccionesJuego[idioma].jugadorImpar = 'Jugador Impar';
+        traduccionesJuego[idioma].jugadorPar = 'Jugador Par';
+        traduccionesJuego[idioma].ganadorImpar = '🎉 ¡El jugador Impar ha ganado la partida! 🎉';
+        traduccionesJuego[idioma].ganadorPar = '🎉 ¡El jugador Par ha ganado la partida! 🎉';
+        traduccionesJuego[idioma].ganadorSerieImpar = '🏆 ¡El jugador Impar ha ganado la serie! 🏆';
+        traduccionesJuego[idioma].ganadorSeriePar = '🏆 ¡El jugador Par ha ganado la serie! 🏆';
+    } else if (idioma === 'en') {
+        traduccionesJuego[idioma].jugadorImpar = 'Odd Player';
+        traduccionesJuego[idioma].jugadorPar = 'Even Player';
+        traduccionesJuego[idioma].ganadorImpar = '🎉 Odd Player has won the game! 🎉';
+        traduccionesJuego[idioma].ganadorPar = '🎉 Even Player has won the game! 🎉';
+        traduccionesJuego[idioma].ganadorSerieImpar = '🏆 Odd Player has won the series! 🏆';
+        traduccionesJuego[idioma].ganadorSeriePar = '🏆 Even Player has won the series! 🏆';
+    }
+    
+    // Actualizar la interfaz con las traducciones restauradas
+    actualizarMarcadorSerie();
+    actualizarJugadorHeader();
+    actualizarNumerosDisponibles();
+}
+
+function limpiarFormularioNombres() {
+    // Limpiar los campos del formulario de nombres
+    const nombreParInput = document.getElementById('nombrePar');
+    const nombreImparInput = document.getElementById('nombreImpar');
+    const resultadoForm = document.getElementById('resultadoDelFormJugadores');
+    
+    if (nombreParInput) nombreParInput.value = '';
+    if (nombreImparInput) nombreImparInput.value = '';
+    if (resultadoForm) resultadoForm.innerHTML = '';
+}
+
+function registrarGanadorEnBD(tipoGanador) {
+    let nombreGanador = '';
+    const idioma = getIdiomaActual();
+
+    if (tipoGanador === 'Impar') {
+        nombreGanador = nombreJugadorImpar || traduccionesJuego[idioma].impar;
+    } else if (tipoGanador === 'Par') {
+        nombreGanador = nombreJugadorPar || traduccionesJuego[idioma].par;
+    }
+    if (nombreGanador === 'Computadora') {
+        // No registrar si la computadora gana
+        return;
+    }
+
+    fetch('modulos/RegistrarGanador.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombreGanador })
+    })
+    .then(response => response.json())
+    .then(respuesta => {
+        if (respuesta.success) {
+            console.log('Partida registrada correctamente');
+        } else {
+            alert('Error al registrar partida: ' + (respuesta.message || 'Error desconocido'));
+            console.error('Error al registrar partida:', respuesta.message);
+        }
+    })
+    .catch(error => {
+        alert('Error en la petición al registrar ganador: ' + error);
+        console.error('Error en la petición:', error);
+    });
+}
+
 function actualizarMarcadorSerie() {
     let marcador = document.getElementById('marcador-serie');
     if (!marcador) {
@@ -543,6 +736,8 @@ function actualizarJugadorHeader() {
 
 function actualizarNumerosDisponibles() {
     const contenedor = document.getElementById('numeros-disponibles');
+    if (!contenedor) return; // Si no existe el contenedor, no hacer nada
+    
     let numeros = playerTurn ? arrayImpar : arrayPar;
     // Filtra el string vacío si existe
     numeros = numeros.filter(n => n !== "");
@@ -555,9 +750,12 @@ function actualizarNumerosDisponibles() {
 if (typeof window !== 'undefined') {
     const idiomaSelect = document.getElementById('idioma-select');
     if (idiomaSelect) {
-        idiomaSelect.addEventListener('change', function() {
-            actualizarMarcadorSerie();
-            actualizarJugadorHeader();
+            idiomaSelect.addEventListener('change', function() {
+        // Actualizar traducciones con nombres reales
+        actualizarTraduccionesConNombres();
+        actualizarMarcadorSerie();
+        actualizarJugadorHeader();
+        actualizarNumerosDisponibles();
             // Si hay modal de ganador de ronda abierto, actualizarlo
             const modalGanador = document.getElementById('mensaje-ganador');
             if (modalGanador) {
@@ -589,78 +787,83 @@ if (typeof window !== 'undefined') {
         actualizarTraduccionesConNombres();
         actualizarMarcadorSerie();
         actualizarJugadorHeader();
+        actualizarNumerosDisponibles();
     });
 }
 
 function verificarGanadorSerie() {
     let necesario = Math.floor(mejorDe / 2) + 1;
     if (victoriasImpar >= necesario) {
+        // Registrar ganador en la base de datos
+        registrarGanadorEnBD('Impar');
         mostrarModalGanadorFinal('Impar');
         // NO reiniciar el juego aquí
         // resetGame.reiniciarSerie = true;
     } else if (victoriasPar >= necesario) {
+        // Registrar ganador en la base de datos
+        registrarGanadorEnBD('Par');
         mostrarModalGanadorFinal('Par');
         // NO reiniciar el juego aquí
         // resetGame.reiniciarSerie = true;
     }
 }
 
-// function mostrarModalGanadorFinal(ganador) {
-//     let modalExistente = document.getElementById('mensaje-ganador-final');
-//     if (modalExistente) modalExistente.remove();
-//     const modal = document.createElement('div');
-//     modal.id = 'mensaje-ganador-final';
-//     modal.className = 'mensaje-ganador-final ' + (ganador === 'Par' ? 'par' : 'impar');
-//     const idioma = getIdiomaActual();
-//     let mensaje = '';
-//     if (ganador === 'Par') {
-//         mensaje = traduccionesJuego[idioma].ganadorSeriePar;
-//     } else {
-//         mensaje = traduccionesJuego[idioma].ganadorSerieImpar;
-//     }
-//     modal.innerHTML = `<h2>${mensaje}</h2>
-//         <div class="botones-final">
-//             <button class='btn-volver-inicio' onclick="volverAlInicio()">${traduccionesJuego[idioma].btnVolver}</button>
-//             <button class='btn-revancha' onclick="revancha()">${traduccionesJuego[idioma].btnRevancha}</button>
-//         </div>`;
-//     document.body.appendChild(modal);
-//     // Refuerza el CSS de los botones si no existe
-//     if (!document.getElementById('css-btn-volver-inicio')) {
-//         const style = document.createElement('style');
-//         style.id = 'css-btn-volver-inicio';
-//         style.innerHTML = `
-//         .botones-final {
-//             text-align: center;
-//             margin-top: 1.5rem;
-//         }
-//         .btn-volver-inicio, .btn-revancha {
-//             display: inline-block;
-//             margin: 0 1rem;
-//             background: #3b82f6;
-//             color: #fff;
-//             font-size: 1.3rem;
-//             font-weight: bold;
-//             border: none;
-//             border-radius: 10px;
-//             padding: 0.8rem 2.5rem;
-//             cursor: pointer;
-//             box-shadow: 0 2px 8px rgba(59,130,246,0.15);
-//             transition: background 0.2s, transform 0.2s;
-//         }
-//         .btn-volver-inicio:hover, .btn-revancha:hover {
-//             background: #2563eb;
-//             transform: scale(1.05);
-//         }
-//         .btn-revancha {
-//             background: #22c55e;
-//         }
-//         .btn-revancha:hover {
-//             background: #16a34a;
-//         }
-//         `;
-//         document.head.appendChild(style);
-//     }
-// }
+function mostrarModalGanadorFinal(ganador) {
+    let modalExistente = document.getElementById('mensaje-ganador-final');
+    if (modalExistente) modalExistente.remove();
+    const modal = document.createElement('div');
+    modal.id = 'mensaje-ganador-final';
+    modal.className = 'mensaje-ganador-final ' + (ganador === 'Par' ? 'par' : 'impar');
+    const idioma = getIdiomaActual();
+    let mensaje = '';
+    if (ganador === 'Par') {
+        mensaje = traduccionesJuego[idioma].ganadorSeriePar;
+    } else {
+        mensaje = traduccionesJuego[idioma].ganadorSerieImpar;
+    }
+    modal.innerHTML = `<h2>${mensaje}</h2>
+        <div class="botones-final">
+            <button class='btn-volver-inicio' onclick="volverAlInicio()">${traduccionesJuego[idioma].btnVolver}</button>
+            <button class='btn-revancha' onclick="revancha()">${traduccionesJuego[idioma].btnRevancha}</button>
+        </div>`;
+    document.body.appendChild(modal);
+    // Refuerza el CSS de los botones si no existe
+    if (!document.getElementById('css-btn-volver-inicio')) {
+        const style = document.createElement('style');
+        style.id = 'css-btn-volver-inicio';
+        style.innerHTML = `
+        .botones-final {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .btn-volver-inicio, .btn-revancha {
+            display: inline-block;
+            margin: 0 1rem;
+            background: #3b82f6;
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            padding: 0.8rem 2.5rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(59,130,246,0.15);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .btn-volver-inicio:hover, .btn-revancha:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+        .btn-revancha {
+            background: #22c55e;
+        }
+        .btn-revancha:hover {
+            background: #16a34a;
+        }
+        `;
+        document.head.appendChild(style);
+    }
+}
 
 function revancha() {
     // Cerrar cualquier modal de ganador
@@ -678,6 +881,31 @@ function volverAlInicio() {
     if (modalFinal) modalFinal.remove();
     let modalRonda = document.getElementById('mensaje-ganador');
     if (modalRonda) modalRonda.remove();
+    
+    // Borrar los nombres de los jugadores
+    nombreJugadorPar = '';
+    nombreJugadorImpar = '';
+    
+    // Limpiar los campos del formulario de nombres
+    limpiarFormularioNombres();
+    // Limpiar inputs del modal de jugadores
+    const inputHumano = document.getElementById('nombreHumano');
+    const inputPar = document.getElementById('nombrePar');
+    const inputImpar = document.getElementById('nombreImpar');
+    if (inputHumano) inputHumano.value = '';
+    if (inputPar) inputPar.value = '';
+    if (inputImpar) inputImpar.value = '';
+    // Restaurar las traducciones originales
+    restaurarTraduccionesOriginales();
+    // Ocultar selector de lado CPU solo en modo pvp
+    const divLadoCPU = document.getElementById('divLadoCPU');
+    if (divLadoCPU) divLadoCPU.style.display = (modoJuego === 'cpu') ? 'block' : 'none';
+    // Limpiar selector de lado
+    const selectLadoCPU = document.getElementById('selectLadoCPU');
+    if (selectLadoCPU) selectLadoCPU.selectedIndex = 0;
+    // Reiniciar el juego completamente
+    resetGame.reiniciarSerie = true;
+    resetGame();
     // Mostrar el modal de selección de modo
     document.getElementById('overlay').classList.remove('oculto');
     document.body.classList.add('modal-abierto');

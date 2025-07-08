@@ -55,16 +55,27 @@
     </div>
   </div>
 
-  <div id="modalJugador">
+  <div id="modalJugador" class="oculto">
     <div class="modal-modo-juego">
-      <h2 class="modal-title">Ingresar Jugadores</h2>
+      <h2 class="modal-title">Ingresar jugador</h2>
       <div class="modal-body">
-        <div class="mb-3">
-          <label for="nombrePar" class="form-label" style="font-size: 20px;"; ">Nombre del Par:</label>
+        <div id="divLadoCPU" class="mb-3" style="display:none;">
+          <label for="selectLadoCPU" class="form-label" style="font-size: 18px;">¿Con qué lado quieres jugar?</label>
+          <select id="selectLadoCPU" class="form-control">
+            <option value="Impar">Impar</option>
+            <option value="Par">Par</option>
+          </select>
+        </div>
+        <div class="mb-3" id="divNombreHumano" style="display:none;">
+          <label for="nombreHumano" class="form-label" style="font-size: 20px;">Nombre del jugador:</label>
+          <input type="text" class="form-control" id="nombreHumano">
+        </div>
+        <div class="mb-3" id="divPar">
+          <label for="nombrePar" class="form-label" id="labelPar" style="font-size: 20px;">Nombre del jugador Par:</label>
           <input type="text" class="form-control" id="nombrePar">
         </div>
-        <div class="mb-3">
-          <label for="nombreImpar" class="form-label" style="font-size: 20px;">Nombre del Impar:</label>
+        <div class="mb-3" id="divImpar">
+          <label for="nombreImpar" class="form-label" id="labelImpar" style="font-size: 20px;">Nombre del jugador Impar:</label>
           <input type="text" class="form-control" id="nombreImpar">
         </div>
       </div>
@@ -73,7 +84,7 @@
         <form action="juego.php">
           <button style="color: white;" type="submit" class="btn btn-secondary">Cancelar</button>
         </form>
-          <button style="color: white;" type="button" onclick="IngresarJugador()">Iniciar juego</button>
+        <button style="color: white;" type="button" onclick="IngresarJugador()">Iniciar juego</button>
       </div>
     </div>
   </div>
