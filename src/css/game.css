@@ -702,6 +702,7 @@ body.modal-abierto {
   text-align: center;
 }
 .mejor-de-label {
+  color: #22223b;
   font-weight: 500;
   font-size: 1.1rem;
 }
@@ -839,4 +840,23 @@ main.container {
     padding: 0.7rem 0.2rem;
     border-radius: 12px;
   }
+}
+
+.btn-volver-inicio-modal {
+  display: block;
+  margin: 1.5rem auto 0 auto;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 2.2rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.13);
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-volver-inicio-modal:hover {
+  background: #2563eb;
+  transform: scale(1.05);
 }

@@ -232,7 +232,7 @@ function mostrarModalGanador(ganador) {
 
         if (hayGanadorSerie) {
             if (ganador === 'Par') {
-                mensaje = traduccionesJuego[idioma].ganadorSeriePar;
+                mensaje = traduccionesJuego[idioma].ganadorSeriePar ;
             } else {
                 mensaje = traduccionesJuego[idioma].ganadorSerieImpar;
             }
